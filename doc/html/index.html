@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>CG2 FE Software</title>
+
+
+  <script type="text/javascript" src="memsize.js">
+  </script>
+</head>
+
+
+<body>
+
+<img style="width: 207px; height: 85px;" alt="CG2" title="CG2 Fixed Effects Estimation Software" src="../images/cg2_logo.png"><br>
+
+<h1>Fixed Effects Estimation Software</h1>
+
+<h4>Experienced users can <a href="#Downloads">skip</a>
+directly to the Downloads/HowTo Section<br>
+
+</h4>
+
+<h2>Overview</h2>
+
+CG2 is a package of Fortran 90 and SAS programs that estimate
+non-nested 2 component fixed effect models. &nbsp;The
+programs have been successfully compiled and tested on multiple *nix
+platforms (IA32 (SuSe and Redhat Linux), Itanium (SuSe Linux),
+and&nbsp;Sparc (Solaris)), but the code should work fine on other
+platforms as well (ie. IA32 (Windows)).<br>
+
+<br>
+
+The estimation algorithms were developed&nbsp;to
+solve large-scale fixed person and firm effect wage models.
+&nbsp;In
+the typical scenario, a person's earnings and place of employment are
+observed over time,
+with&nbsp;mobility of persons across firms. &nbsp;This mobility
+or "connectedness" of persons enables the estimation
+of the model, although for problems with millions of persons and firms,
+obtaining results require a substantial amount of computing power.
+&nbsp;For users with large problems to solve, the main constraint
+will be acquiring a computing platform with&nbsp;sufficient
+&nbsp;physical memory or RAM.
+&nbsp;For example, the
+largest problem we have solved required 137GB of physical memory and
+took
+zzzz hours of CPU time on a Sun Fire 12k server. &nbsp;However,
+this
+does not imply that CG2 is inefficient, since no
+known software&nbsp;can solve the same size problem using fewer
+system resources.
+&nbsp;To &nbsp;further reduce
+single system image memory requirements, a cluster aware version of CG2
+is under
+development.<br>
+
+<br>
+
+If you need additional information, please see the <a href="#References">References</a> section below.<br>
+
+<h2>Acknowledgements</h2>
+
+John Abowd, Robert Creecy, Kevin McKinney, and Lars Vilhuber.
+&nbsp;Census Bureau and the rest of the LEHD staff.
+<h2>Getting Started</h2>
+
+In order to use the CG2 package, certain basic software must be
+available on a current *nix platform (The software will likely port to
+Windows just fine, but we have not devoted time to testing this
+assertion. &nbsp;If anyone succeeds in using this software on IA32
+Windows, please let us know and we will post the information here). <br>
+
+<br>
+
+The first requirement is a suitable Fortran 90/95 compiler.
+&nbsp;The
+software is known to work with Intel Compilers on IA32 and Itanium and
+with the Sun compilers on Sparc/Solaris. &nbsp;The <a href="http://www.intel.com/cd/software/products/asmo-na/eng/compilers/index.htm">Intel
+compilers</a> are available for Linux and Windows and are free of
+charge for non-commercial users. &nbsp;The <a href="http://www.sun.com/software/products/studio/index.xml">Sun
+compilers</a>
+are available for Linux and Sparc/Solaris, but are NOT available free
+of charge. &nbsp;Other Fortran compilers will likely work as well,
+but
+are not supported.<br>
+
+<br>
+
+The second requirement is the SAS statistical/data management software
+package from the SAS Institute. &nbsp;SAS is available for a wide
+range
+of <a href="http://support.sas.com/documentation/installcenter/">hardware/software
+combinations</a>.
+&nbsp;If SAS is not available for your platform, other software
+packages MIGHT be used to pre and post-process the data, but this is
+not supported.<br>
+
+<br>
+
+A suitable shell environment such as&nbsp;Bash or Ksh, while not
+strictly required is very desirable. &nbsp;Either shell should be
+available on virtually all *nix platforms.<br>
+
+<br>
+
+Even if the above requirements can be met, the user must insure that
+their computing platform has sufficient physical memory. &nbsp;Not
+surprisingly, the amount of memory required depends directly on the
+size of the problem you would like to solve. &nbsp;To determine the
+size of the problem four characteristics of the input data must be
+calculated; the number of cells, persons, firms, and covariates.
+&nbsp;The number of persons and firms as well as the number of
+covariates or right hand side variables&nbsp;should be relatively
+easy
+to ascertain (although make sure to give the last value some thought
+and use an upper bound, since memory usage increases almost linearly
+with the number of covariates). &nbsp;The cells total refers to the
+sum
+over all persons of the number of unique firms&nbsp;each person has
+worked for. &nbsp;A sample SAS program to calculate this value is
+available <a href="cells_count.html">here</a>.<br>
+
+<br>
+
+Once you have obtained the number of cells, persons, firms, and
+covariates, plug them into the calculator and press the calculate
+button. &nbsp;In the bottom row, you will receive the minimum
+memory
+(in megabytes) required to run CG2.<br>
+
+<br>
+
+<form name="calc" action="#">
+  <table align="center" border="1">
+
+    <tbody>
+
+      <tr>
+
+        <td colspan="2">CG2_4v3 Memory Calculator</td>
+
+      </tr>
+
+      <tr>
+
+        <td>Person/Firm Cells:</td>
+
+        <td><input name="ncells" size="11" type="text"></td>
+
+      </tr>
+
+      <tr>
+
+        <td>Persons:</td>
+
+        <td><input name="npers" size="11" type="text"></td>
+
+      </tr>
+
+      <tr>
+
+        <td>Firms:</td>
+
+        <td><input name="nfirm" size="11" type="text"></td>
+
+      </tr>
+
+      <tr>
+
+        <td>Covariates:</td>
+
+        <td><input name="ncov" size="11" type="text"></td>
+
+      </tr>
+
+      <tr>
+
+        <td colspan="2" align="center"><input value="Calculate" onclick="memsize();" type="button"></td>
+
+      </tr>
+
+      <tr>
+
+        <td>Minimum Memory Required in MB:</td>
+
+        <td><input name="total" size="11" type="text"></td>
+
+      </tr>
+
+    </tbody>
+  </table>
+
+</form>
+
+If the value returned by the calculator is less than about .7*(Physical
+Memory) and you can meet all of the other requirements, then
+CONGRATULATIONS you are ready to begin installing CG2 (Keep in mind
+that the .7 figure is only an estimate based on our experience and will
+likely vary across platforms depending on how much memory is used by
+the operating system, other users, daemons, etc. &nbsp;Feel free to
+replace my estimate with a number&nbsp;appropriate for your
+situation).<br>
+
+<h2><a name="Downloads"></a>Downloads</h2>
+
+The CG2 software is available in multple ZIP archives and can be
+downloaded <a href="downloads.html">here</a>.
+<h2>HowTo</h2>
+
+Various <a href="HowTo.html">HowTo</a>'s are
+available to guide you through installing and then using CG2.<br>
+
+<h2><a name="References"></a>References</h2>
+
+Anybody want to add some references here?? &nbsp;If you have the
+PDFs I
+will include links to them. &nbsp;A short model write-up would be
+good
+to have as a new page. &nbsp;Anybody have any suggestions for
+equations
+in html? or we can just post PDFs.
+<h2>Contact Us</h2>
+
+If you have any questions or comments please contact Kevin McKinney at <a href="mailto:kevinm@ccrdc.ucla.edu">kevinm@ccrdc.ucla.edu</a>.
+</body>
+</html>

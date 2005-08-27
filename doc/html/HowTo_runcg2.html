@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>HowTo Run CG2</title>
+</head>
+<body>
+<h2>HowTo Run CG2</h2>
+<br>
+With the pre-processing steps complete you should have a binary input
+file named cgout4 and the size of the problem stored in
+runcg/02_size_calc.lst. &nbsp;You are now ready to run CG2.<br>
+<ol>
+  <li>The runcg2.ksh script will call cg2_4v3 for you and setup
+everything the program needs to run. &nbsp;The first line of the script
+should point to either the bash or ksh shell (by default /bin/bash).
+&nbsp;Open the script in a text editor and make sure that the CG
+variable points to the correct location of the cg2_4v3 binary on your
+system. &nbsp;The PROGDIR variable should contain the name of the
+directory containing the correct 02_size_calc.lst file.</li>
+  <li>At the prompt type ./runcg2.ksh or ./runcg2.ksh &amp; to put the process in the background.</li>
+  <li>There are two log files. &nbsp;Runcg.log contains output from the
+script, such as when CG2 started and finished, while cg.cglog contains
+output from CG2. &nbsp;You can monitor the progress of CG2 by looking
+at cg.cglog periodically. &nbsp;The size of the problem and memory
+allocated should match what you expect. &nbsp;The first step is to read
+the data, the second stage preconditions the data, the third stage
+searches for the optimal paramater estimates, and in the final step the
+results are output.</li>
+  <li>Optional. &nbsp;The <span style="font-style: italic;">cgout</span>
+directory contains&nbsp;the synthetic data CG2 output files from the
+reference system. &nbsp;Compare these with your cg.betas and cg.means
+file to test your installation. &nbsp;</li>
+</ol>
+If you are successful two output files will be created<br>
+<br>
+<ol>
+  <li>cg.betas - Text file containing your parameter estimates.
+&nbsp;The covariates or right hand side variables are listed first,
+followed by the fixed person effects, and&nbsp;finally the firm effects
+minus one. &nbsp;Since all of the person effects are estimated no
+constant is included in the model. &nbsp;The covariates are correct as
+reported by CG2, but the person and firm effects are not identified at
+this point. &nbsp;The post-processing imposes the identification rules
+in the next stage.</li>
+  <li>cg.means - The mean of the dependent variable and each covariate.
+&nbsp;Can be used to check if CG2 read in the data correctly and are
+used in the post-processing.</li>
+</ol>
+<br>
+Return to the <a href="HowTo.html">HowTo</a> or <a href="index.html">Main</a> page.
+</body>
+</html>

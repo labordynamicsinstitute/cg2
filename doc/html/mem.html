@@ -1,0 +1,14 @@
+<script type="text/javascript">
+var ncells = 1163110;
+var npers = 362913;
+var nfirm = 429209;
+var ncov = 9;
+
+var ncoef=ncov+npers+nfirm-1;
+var ncoef2=ncov+nfirm-1;
+var imem=(4*(2*ncells))/(1024*1024);
+var idmem=(8*(ncov+2*npers+nfirm+ncells+2*ncov*ncov+npers*ncov+nfirm*ncov+5*ncoef2 +2*ncoef))/(1024*1024);
+var total=imem+idmem;
+
+document.write('Total Memory: ' +total);
+</script>

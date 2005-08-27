@@ -1,0 +1,13 @@
+FFLAGS = -dalign -fast -xlic_lib=sunperf -xarch=v9b
+FPARFLAGS = -dalign -mt -fast -xlic_lib=sunperf -xarch=v9b
+FC = f95
+SRCS = my_datav3.f90 matvec2v3.f90   modcgv3.f90 cg2_4v3.f90   
+exe:     $(SRCS)
+	$(FC) $(FFLAGS) $(SRCS) -o cg2_4v3 
+
+dbg:	$(SRCS)
+	$(FC) -g -dalign -xlic_lib=sunperf -xarch=v9b $(SRCS) -o cg2_4v3_dbg
+
+
+
+        

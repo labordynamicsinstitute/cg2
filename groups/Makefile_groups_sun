@@ -1,0 +1,8 @@
+FFLAGS = -O5
+FC = f90
+SRCS = my_data.f90  groups.master.f90  
+exe:     $(SRCS)
+	$(FC) $(FFLAGS) $(SRCS) -o groups -ldxml
+
+
+        

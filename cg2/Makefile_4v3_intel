@@ -1,0 +1,9 @@
+FFLAGS =   -O3 
+FLDFLAGS = -L/opt/intel/mkl72/lib/32 -lmkl_lapack -lmkl_p4 -lmkl_lapack32 -lmkl
+FC = ifort
+SRCS = my_datav3.f90 matvec2v3.f90   modcgv3.f90  cg2_4v3.f90   
+exe:     $(SRCS)
+	$(FC) $(FFLAGS) $(SRCS) -o cg2_4v3 $(FLDFLAGS) 
+dbg:	$(SRCS)
+	$(FC) -g $(FFLAGS)  $(SRCS) -o cg2_4v3_dbg $(FLDFLAGS)
+

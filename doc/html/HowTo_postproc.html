@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>HowTo Post-Process the CG2 Output</title>
+
+
+</head>
+<body>
+
+<h2>HowTo Post-Process the CG2 Output</h2>
+
+<br>
+
+The post-processing&nbsp;backs out the constant (a=y-xb) and imposes the
+identification rules. &nbsp;The person and firm effects are only
+identified within connected groups. &nbsp;The first step involves
+identifying the groups present in your data. &nbsp;The group
+information is combined with the CG2 parameter estimates and a final SAS dataset
+is produced.<br>
+<br>
+<h3>The Groups Program</h3>
+The grouping program identifies the set(s) of persons and firms that
+are connected to each other. &nbsp;Connectedness is most easily defined
+through an example. &nbsp;Pick any firm in the data and identify all
+the workers ever employed at the firm. &nbsp;Then identify all of the
+firms each employee ever worked at. &nbsp;For the new expanded set of
+firms identify all of the workers ever employed at those firms.
+&nbsp;Repeat the algorthm until no more firms/workers can be added.
+&nbsp;Labor market data typically has 95+ percent of the workers and
+firms in the first group with the rest of the workers in many small
+groups.<br>
+<br>
+The groups program is crucial since the persons and firm effects are
+only identified within a group (unless you are willing to make some
+assumptions). &nbsp;This information must be available before any
+identification rule can be implemented.<br>
+<ol>
+  <li>Go to the runcg_out/groups directory.</li>
+  <li>Run the firmcells.sas program, creating the firmcells file.
+&nbsp;The firmcells file is the same as cellsout, but it is sorted by
+firm ID, person ID.</li>
+  <li>Open the rungroups.ksh file with a text editor. &nbsp;At the
+bottom of the file make sure that the location of the groups binary is
+correct (use an explicit path. &nbsp;Some versions of Unix have a
+system groups program). &nbsp;Run rungroups.ksh</li>
+  <li>Examine groups.log for any errors</li>
+  <li>Run groupstats.sas if you are interested in the number and size of the groups (the synthetic data should only have two groups).</li>
+</ol>
+
+<h3>Identification</h3>
+The final stage involves calculating the constant, bringing in the
+parameter estimates, imposing the identification rule, and decomposing
+earnings into various components (constant, xb, experience, person,
+firm, h=person + exper).<br>
+<br>
+<ol>
+  <li>Go to the cgpost directory</li>
+  <li>Open the config_param.sas file with a text editor. &nbsp;Set the
+depvar, persid, and firmid macro variables. &nbsp;Set the betadir macro
+variable to the location where you ran cg2. &nbsp;Skip down a few lines
+and set the rhs macro variable appropriately.</li>
+  <li>Run the 00_setup.sas program. &nbsp;Make sure you run it twice
+the first time or the program will not finish properly. &nbsp;The
+program automatically creates the cg.coef file used by other programs
+and sets up links to cg.betas, cg.in, and cg.means.</li>
+  <li>Run the 01_rhs.ksh shell script with the first argument cg.
+&nbsp;The script generates a SAS program that creates a SAS dataset
+(rhs.sas7bdat) containing the covariates (betas) from the CG2 run.</li>
+  <li>Run the 02_means_2v3.ksh script with the argument cg. &nbsp;The
+script generates a SAS program that creates a SAS dataset
+(means02.sas7bdat) containing the means of the dependent and right hand
+side variables.</li>
+  <li>Run the 03_constant.sas program. &nbsp;Creates the constant using the property that a regression goes through the means.</li>
+  <li>Run the 04_fe_read.sas program. &nbsp;Reads in the groups, person
+effects, and the firm effects and creates SAS datasets for each of them
+in the same location where CG2 was run (groups.sas7bdat,
+theta.sas7bdat, psi.sas7bdat).</li>
+  <li>Run the 05_xb.sas program. &nbsp;Calculates the Xb and experience
+index for each observation (stored in xb.sas7bdat). &nbsp;Depending on
+the specification of experience in your model you may need to modify
+this program.</li>
+  <li>Run the 06_join_all.sas program. &nbsp;Brings all of the
+components (groups, person, firm, xb, exper) together into one file
+(hcest1.sas7bdat).</li>
+  <li>Run the 07_identify.sas program. &nbsp;The first step is
+identifying the model. &nbsp;The person effects are set to mean zero
+within each group. &nbsp;In contrast, the firm effects are assumed mean
+zero within each group, and the extra degree of freedom is used to
+estimate an additional firm effect. &nbsp;The firm effects are set to
+mean zero for the entire sample only. &nbsp;Everything is almost ready
+except for groups there are usually some groups where we cannot
+separately identify the person and firm effect (only one person and one
+firm). &nbsp;For these groups I randomly draw a person and firm effect
+from a distribution similar to the overall distributions. &nbsp;Our
+measure of human capital (h) and the residuals are calculated.</li>
+  <li>YOU ARE FINISHED!!!</li>
+</ol>
+
+Return to the <a href="HowTo.html">HowTo</a> or <a href="index.html">Main</a> page.
+</body>
+</html>
