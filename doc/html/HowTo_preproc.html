@@ -2,9 +2,13 @@
 <html>
 <head>
 
+
+  
   
   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
 
+
+  
   
   <title>HowTo Pre-Process Input Data</title>
 </head>
@@ -12,32 +16,41 @@
 
 <body>
 
+
 <h2>HowTo Pre-Process&nbsp;Input Data</h2>
+
 
 <br>
 
-We&nbsp;begin in the <span style="font-style: italic;">runcg</span>
+
+We&nbsp;begin in the <span style="font-style: italic;">01_runcg</span>
 directory. &nbsp;This directory contains 3 main SAS programs and a
 configuration program named config_param.sas. &nbsp;The goal of this
 part of the process is to create a binary input file for CG2 and to
 calculate the size of the problem.<br>
 
+
 <h3>Testing Your Installation</h3>
 
+
 The package is setup by default to use a small 49 observation dataset
-created by the 01_create_pik_sein_records.sas program. The data is
+created by the <span style="font-style: italic;">01_create_pik_sein_records.sas</span> program. The data is
 purely fictional, but has the correct structure expected by CG2 and can
 be used to test your installation. &nbsp;If you follow the complete
 HowTo set of guides you will be able to compare your CG2 output with
 the results from our reference system.<br>
 
+
 <br>
+
 
 <h3>Pre-Processing Guide</h3>
 
+
 <ol>
 
-  <li>Set up the values in config_param.sas. &nbsp;The binvars macro
+
+  <li>Set up the values in <span style="font-style: italic;">config_param.sas</span>. &nbsp;The <span style="font-family: monospace;">binvars</span> macro
 variable should contain a list beginning with the dependent variable
 followed by each right hand side variable (do not include a constant,
 it is absorbed in the person effect. Be careful as well specifying your
@@ -45,63 +58,71 @@ model to insure that no linear combinations of your right side variables are inc
 CG2 never inverts X'X&nbsp;no check is made to insure that your
 specification is identified. &nbsp;CG2 will produce output, but it will
 be incorrect. &nbsp;If you are unsure of your specification run a regression using
-PROC GLM with the absorb pik sein option.).
-&nbsp;The inputs variable is not required but can be used in your
-programs when creating the input file. &nbsp;The macro variable cellout
+PROC GLM with the <span style="font-family: monospace;">absorb pik sein</span> option.).
+&nbsp;The <span style="font-family: monospace;">inputs</span> variable is not required but can be used in your
+programs when creating the input file. &nbsp;The macro variable <span style="font-family: monospace;">cellout</span>
 should point to the directory where you would like the binary file to
 be created. &nbsp;This directory can be located anywhere on the system.
 &nbsp;If you are solving a large problem it would be a good idea to use
 the fastest disk structure available on your system.</li>
 
-  <li>Run the 01_create_pik_sein_records.sas program to create
-cg.wage_history_01.sas7bdat &nbsp;or prepare your own&nbsp;file with
+
+  <li>Run the <span style="font-style: italic;">01_create_pik_sein_records.sas</span> program to create
+    <span style="font-style: italic;">cg.wage_history_01.sas7bdat </span>&nbsp;or prepare your own&nbsp;file with
 the same name. &nbsp;The file must be sorted by person ID (pik) firm ID
 (sein) and time (year, quarter, week, etc.), with no duplicates (A
 person should only have one employer in each period).</li>
 
-  <li>Run the 02 _size_calc.sas program to determine the size of the
-problem (program requires a dataset named cg.wage_history_01.sas7bdat).
+
+  <li>Run the <span style="font-style: italic;">02 _size_calc.sas</span> program to determine the size of the
+problem (program requires a dataset named <span style="font-style: italic;">cg.wage_history_01.sas7bdat</span>).
 &nbsp;Check the log file to insure the program completed successfully.
 &nbsp;Search
 for the following line....
-cg.cgin:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-49&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5.
-&nbsp;This line provides the configuration information for CG2: Number
-of Observations, Cells, Persons, and Firms. &nbsp;The program also
+    <br>
+    <pre>cg.cgin:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;49&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5.
+&nbsp;</pre>
+This line provides the configuration information for CG2: Number
+of Observations, Cells, Persons, and Firms. The program also
 creates sequential person and firm identifiers that are used by CG2 and
-the groups program. &nbsp;The cellsout file contains a list of the
+the <span style="font-style: italic;">groups</span> program. &nbsp;The <span style="font-style: italic;">cellsout</span> file contains a list of the
 person firm matches or cells that will be used by the grouping program.
-&nbsp;The _lookup file contains the crosswalk for pik sein to the
-sequential person and firm identifiers used by CG2. &nbsp;The strip02
+&nbsp;The _<span style="font-style: italic;">lookup</span> file contains the crosswalk for pik sein to the
+sequential person and firm identifiers used by CG2. &nbsp;The <span style="font-style: italic;">strip02</span>
 file is a pik sein year file that contains the sequential person and
 firm identifiers. &nbsp;This file is used to attach the sequential
 identifiers to your input data in the next step. &nbsp;</li>
 
-  <li>Run the 04_get_binary4.sas program to create the binary input
+
+  <li>Run the <span style="font-style: italic;">04_get_binary4.sas</span> program to create the binary input
 file for CG2. &nbsp;The sequential identifiers are attached to your
-data and the binary file&nbsp;cgout4 is created. &nbsp;This file is
+data and the binary file&nbsp;<span style="font-style: italic;">cgout4</span> is created. &nbsp;This file is
 specific to each run of CG2. &nbsp; If you would like to add a variable
 to your model, change the record selection criteria, etc. then the
 whole process must be repeated.</li>
 
+
 </ol>
 
+
 <h3>Additional Information</h3>
+
 
 You are likely to run CG2 multiple times while conducting your data
 analysis. &nbsp;It is a good idea to create a SAS dataset in pik sein
 year sort order containing all of the variables and records you would
 like to use. &nbsp;This dataset will ideally be created only once.
 &nbsp;For each succeeding analysis you can select the sample you would
-like to use for each run in the 02_size_calc.sas and 04_get_binary4.sas
+like to use for each run in the <span style="font-style: italic;">02_size_calc.sas</span> and <span style="font-style: italic;">04_get_binary4.sas</span>
 programs. &nbsp;If you discover you need a new variable, you can create
-it in the 04_get_binary4.sas program.<br>
+it in the <span style="font-style: italic;">04_get_binary4.sas</span> program.<br>
+
 
 <br>
 
+
 Return to the <a href="file:///Z:/Work/HC_Estimates/CG2_web/html/HowTo.html">HowTo</a> or <a href="file:///Z:/Work/HC_Estimates/CG2_web/html/index.html">Main</a> page.<br>
+
 
 </body>
 </html>
