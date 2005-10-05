@@ -5,6 +5,12 @@
   <title>SAS Code to Calculate the Number of Cells</title>
 </head>
 <body>
+<!-- Subversion info:
+$Date$
+$Rev$
+$HeadURL$
+$Author$
+                     -->
 <h2>Sample SAS Code to Calculate the Number of Cells</h2>
 <pre>libname dot '.';<br><br>proc sort data=dot.in(keep=personid firmid);<br>   by personid firmid;<br>run;<br><br>data out;<br>   set dot.in;<br>      by personid firmid;<br><br>   if first.firmid then output;<br>run;</pre>
 <pre>/* The number of observations in the proc contents */</pre>
