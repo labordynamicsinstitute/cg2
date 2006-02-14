@@ -12,8 +12,8 @@
 
 do params.do
 
-use cgin
-sort pupilid schoolid
+use $CGIN
+sort $personid $firmid
 
 set more off 
 
@@ -41,11 +41,11 @@ function maincg(string rowvector covariates) {
 	printf("Dependent variable\n");
 	st_view(y=., 	., "$DEPENDENT")
 
-	printf("Pupil IDs\n");
-	st_view(pupil=., 	., "pupilid")
+	printf("Person IDs\n");
+	st_view(person=., 	., "$personid")
 
-	printf("School IDs\n");
-	st_view(school=., ., "schoolid")
+	printf("Firm IDs\n");
+	st_view(firm=., ., "$firmid")
 
 	printf("Dependent variable : $DEPENDENT\n");
 
@@ -53,14 +53,14 @@ function maincg(string rowvector covariates) {
 
 	n 		= 	length(y);
 	ncov		=	cols(cov);
-	npupils 	=	$NPUPILS;
-	nschools	=	$NSCHOOLS;
+	npersons 	=	$NPERSONS;
+	nfirms	=	$NFIRMS;
 	ncells	=	$NCELLS;
-	ncoef		= 	npupils + nschools + ncov - 1;
+	ncoef		= 	npersons + nfirms + ncov - 1;
 
-	printf("%f observations, %f covariates, %f pupils, %f schools, %f cells\n",n,ncov,npupils,nschools,ncells);
+	printf("%f observations, %f covariates, %f persons, %f firms, %f cells\n",n,ncov,npersons,nfirms,ncells);
 
-	if ((length(y) != rows(cov)) | (length(y)!=length(pupil)) | (length(y)!=length(school)) ) {
+	if ((length(y) != rows(cov)) | (length(y)!=length(person)) | (length(y)!=length(firm)) ) {
 		printf("Error : invalid matrix length\n");
 		exit();
 	}
@@ -68,33 +68,33 @@ function maincg(string rowvector covariates) {
 	printf("Initializing normal form matrices\n");
 
 	icell = 1;
-	xd	= J(npupils,ncov,0);
-	xf	= J(nschools,ncov,0);
-	d	= J(npupils,1, 0);
+	xd	= J(npersons,ncov,0);
+	xf	= J(nfirms,ncov,0);
+	d	= J(npersons,1, 0);
 	dfp	= J(ncells, 1, 0);
 	dff	= J(ncells, 1, 0);
 	df	= J(ncells, 1, 0);
-	f	= J(nschools, 1, 0);
+	f	= J(nfirms, 1, 0);
 
 	printf("Starting loop\n");
 
 	for ( i=1 ; i<=n ; i++ ) {
 
 		if (i>1) {
-			if (pupil[i] != pupil[i-1] || (school[i] != school[i-1] && pupil[i] == pupil[i-1])) {
+			if (person[i] != person[i-1] || (firm[i] != firm[i-1] && person[i] == person[i-1])) {
 				icell = icell +1;
 			}
 		}
 
 		/* Construction de d */
-		jp = pupil[i]
+		jp = person[i]
 		d[jp] = d[jp] + 1
 
 		/* Construction de dfp */
 		dfp[icell] = jp
 
 		/* Construction de f */
-		jf = school[i]
+		jf = firm[i]
 		f[jf] = f[jf] + 1
 
 		/* Construction de dff */
@@ -150,19 +150,19 @@ function maincg(string rowvector covariates) {
 	xf 				= xf * luinv(u) ;
 	printf("Finished XF<-XF*u^-1\n");
 
-	for (i = 1; i<=npupils ; i ++) {
+	for (i = 1; i<=npersons ; i ++) {
 		d[i] = 1/sqrt(d[i]);
 	}
 
-	for (i = 1; i<=nschools ; i ++) {
+	for (i = 1; i<=nfirms ; i ++) {
 		f[i] = 1/sqrt(f[i]);
 	}
 
 	for (j=1;j<=ncov;j++) {
-		for (i = 1; i<=npupils ; i ++ ) {
+		for (i = 1; i<=npersons ; i ++ ) {
 			xd[i, j] = xd[i, j]*d[i];
 		}
-		for (i = 1; i<=nschools ; i ++ ) {
+		for (i = 1; i<=nfirms ; i ++ ) {
 			xf[i, j] = xf[i, j]*f[i];
 		}
 	}
@@ -172,7 +172,7 @@ function maincg(string rowvector covariates) {
 	}
 
 	// Does (X D F)'y and puts it in b 
-	xtprod (pupil, school, cov[1 .. n,1..ncov], f, d, y, b, ncov, npupils, nschools, ncells, n);
+	xtprod (person, firm, cov[1 .. n,1..ncov], f, d, y, b, ncov, npersons, nfirms, ncells, n);
 	b = b'
 
 	resid = 1.0e-7
@@ -185,23 +185,23 @@ function maincg(string rowvector covariates) {
 	
 	theta[1..ncov] = u * theta[1..ncov]
 
-	printf("Pupil effects\n");
+	printf("Person effects\n");
 
-	for (jp = 1; jp<=npupils; jp++) {
+	for (jp = 1; jp<=npersons; jp++) {
 		j = ncov + jp
 		theta[j]=theta[j]/d[jp]	
 	}
 
-	printf("School effects\n");
+	printf("Firm effects\n");
 
-	for (jf = 1; jf<=nschools-1; jf++) {
-		j = ncov + npupils +jf
+	for (jf = 1; jf<=nfirms-1; jf++) {
+		j = ncov + npersons +jf
 		theta[j] = theta[j]/f[jf]
 	}
 	
 	printf("Beginning Conjugate Gradient Iterations\n");
 
-	modcg(b,theta,maxit,resid, xd, xf, df, dfp, dff, ncov, npupils, nschools, ncells, ncoef, n);
+	modcg(b,theta,maxit,resid, xd, xf, df, dfp, dff, ncov, npersons, nfirms, ncells, ncoef, n);
 
 	printf("Transforming theta back to original scale\n");
 
@@ -209,13 +209,13 @@ function maincg(string rowvector covariates) {
 
 	theta[1 .. ncov] = luinv(u) * theta[1 .. ncov]
 
-	for (jp = 1; jp <=npupils; jp++) {
+	for (jp = 1; jp <=npersons; jp++) {
 		j = ncov + jp
 		theta[j] = theta[j] * d[jp]
 	}
 
-	for (jf = 1; jf <=nschools-1; jf++) {
-		j = ncov + npupils + jf
+	for (jf = 1; jf <=nfirms-1; jf++) {
+		j = ncov + npersons + jf
 		theta[j] = theta[j] * f[jf]
 	}
 
@@ -232,8 +232,8 @@ void modcg(real vector b, real vector x, real scalar maxit, real scalar resid,
 		real matrix xd, 	real matrix xf, 
 		real matrix df,
 		real matrix dfp, 	real matrix dff,
-		real scalar ncov, real scalar npupils,
-		real scalar nschools, real scalar ncells,
+		real scalar ncov, real scalar npersons,
+		real scalar nfirms, real scalar ncells,
 		real scalar ncoef, real scalar n) {
 
 /* At the beginning x is the initial guess, x is then the approximate solution on output */
@@ -263,7 +263,7 @@ void modcg(real vector b, real vector x, real scalar maxit, real scalar resid,
 		bnrm2 = 1
 	}
 	
-	matvec (x, r, xd, xf, df, dfp, dff, ncov, npupils, nschools, ncells, ncoef);
+	matvec (x, r, xd, xf, df, dfp, dff, ncov, npersons, nfirms, ncells, ncoef);
 
 	r = b - r'
 
@@ -282,7 +282,7 @@ void modcg(real vector b, real vector x, real scalar maxit, real scalar resid,
 
 	for (maxit = 1 ; maxit <= itmax ; maxit ++) {
 		p = w' + beta * p
-		matvec (p, q, xd, xf, df, dfp, dff, ncov, npupils, nschools, ncells, ncoef)
+		matvec (p, q, xd, xf, df, dfp, dff, ncov, npersons, nfirms, ncells, ncoef)
 		alpha = rho / (p'*q)
 		x = x + alpha * p 
 		r = r - alpha *q'
@@ -303,24 +303,24 @@ void matvec(real vector xin, 	real vector rout,
 		real matrix xd, 	real matrix xf,
 		real matrix df,
 		real matrix dfp, 	real matrix dff,
-		real scalar ncov, real scalar npupils,
-		real scalar nschools, real scalar ncells,
+		real scalar ncov, real scalar npersons,
+		real scalar nfirms, real scalar ncells,
 		real scalar ncoef ) {
 
 /* 	Computes the matrix vector product rout <- A*xin
 	with A =(X D F)'(X D F)
 	
 	X'X in xxin(ncov,ncov), assumed identity from preconditioning
-	X'D in xd(npupils, ncov)
-	X'F in xf(nschools, ncov)
+	X'D in xd(npersons, ncov)
+	X'F in xf(nfirms, ncov)
 	D'F in df(ncells), person and firm indices in dfp(ncells) and dff(ncells)
-	D'D is identity from preconditioning dimension(npupils, npupils)
-	F'F is identity from preconditioning dimension(nschools, nschools)
+	D'D is identity from preconditioning dimension(npersons, npersons)
+	F'F is identity from preconditioning dimension(nfirms, nfirms)
 
 	The vectors X and R have three parts,
 	The covariate effects 1:ncov
-	The pupil effects ncov+1:ncov+npupils
-	The school effects ncov+npupils+1:ncov+npupils+nschools 
+	The person effects ncov+1:ncov+npersons
+	The firm effects ncov+npersons+1:ncov+npersons+nfirms 
 
 */
 
@@ -328,21 +328,21 @@ void matvec(real vector xin, 	real vector rout,
 
 /* First the covariate effects */
 	rout = xin
-	rout[1 .. ncov] = cross(xd , (xin[ncov+1 .. ncov+npupils])) + rout[1 .. ncov]
-	rout[1 .. ncov] 	 = cross(xf[1 .. nschools - 1, 1 .. ncov ], (xin[ncov+npupils+1 .. ncov+npupils+nschools-1]) ) + rout[1 .. ncov]
+	rout[1 .. ncov] = cross(xd , (xin[ncov+1 .. ncov+npersons])) + rout[1 .. ncov]
+	rout[1 .. ncov] 	 = cross(xf[1 .. nfirms - 1, 1 .. ncov ], (xin[ncov+npersons+1 .. ncov+npersons+nfirms-1]) ) + rout[1 .. ncov]
 
-/* then the pupil effects */
-	rout[ncov+1 .. ncov+npupils ] 			= xd * xin[1 .. ncov] + rout[ncov+1 .. ncov+npupils ] 
+/* then the person effects */
+	rout[ncov+1 .. ncov+npersons ] 			= xd * xin[1 .. ncov] + rout[ncov+1 .. ncov+npersons ] 
 
-/* and finally the school effects */
-	rout[ncov+npupils+1 .. ncov+npupils+nschools-1] 	= xf[1 .. nschools - 1 , 1 .. ncov] * xin[1 .. ncov] + rout[ncov+npupils+1 .. ncov+npupils+nschools-1]
+/* and finally the firm effects */
+	rout[ncov+npersons+1 .. ncov+npersons+nfirms-1] 	= xf[1 .. nfirms - 1 , 1 .. ncov] * xin[1 .. ncov] + rout[ncov+npersons+1 .. ncov+npersons+nfirms-1]
 	for ( i = 1 ; i <= ncells ; i++ ) {
-		jpupil 	= dfp[i] + ncov
-		jschool 	= dff[i] + ncov + npupils
+		jperson 	= dfp[i] + ncov
+		jfirm 	= dff[i] + ncov + npersons
 	
-		if (jschool <= ncoef) {
-			rout[jpupil] 	= rout[jpupil] 	+ xin[jschool] * df[i]
-			rout[jschool] 	= rout[jschool] 	+ xin[jpupil] * df[i]
+		if (jfirm <= ncoef) {
+			rout[jperson] 	= rout[jperson] 	+ xin[jfirm] * df[i]
+			rout[jfirm] 	= rout[jfirm] 	+ xin[jperson] * df[i]
 		}
 	}
 
@@ -351,24 +351,24 @@ void matvec(real vector xin, 	real vector rout,
 
 
 /* This function multiplies X's */
-void xtprod(real vector pupils, real vector schools, real matrix cov,
+void xtprod(real vector persons, real vector firms, real matrix cov,
 		real vector f, real vector d, 
 		real vector s, real vector r,
-		real scalar ncov, real scalar npupils,
-		real scalar nschools, real scalar ncells,
+		real scalar ncov, real scalar npersons,
+		real scalar nfirms, real scalar ncells,
 		real scalar n ) {
 
 	/*
 		Multiplies X's -> r
 		X is of size ( ncov x n ) and s of size ( ncov )
 
-	 	pupils(n) 	: vector containing the pupilid of the record 
-		schools(n)	: vector containing the schoolid of the record
+	 	persons(n) 	: vector containing the $personid of the record 
+		firms(n)	: vector containing the $firmid of the record
 		cov(n,ncov)	: the covariates of the record
 		s(n)		: the vector being multiplied
-		f(nschools) : vector containing  the number of times the school
+		f(nfirms) : vector containing  the number of times the firm
 					appears in the data 
-		d(npupils)	: vector containing the number of times the pupil
+		d(npersons)	: vector containing the number of times the person
 					appears in the data
 		r(ncoef)	: the output vector
 	*/
@@ -379,16 +379,16 @@ void xtprod(real vector pupils, real vector schools, real matrix cov,
 
 	printf("XTPROD : Computing X'y\n");
 
-	r = J(ncov + npupils + nschools -1 ,1,0);
+	r = J(ncov + npersons + nfirms -1 ,1,0);
 
 	for (i=1; i<=n; i++) {
 		tmp = s[i]
-		jp = pupils[i]
+		jp = persons[i]
 		j = jp + ncov
 		r[j] = r[j] + tmp * d[jp]
-		jf = schools[i]
-		if (jf != nschools) {
-			j = jf+ncov+npupils
+		jf = firms[i]
+		if (jf != nfirms) {
+			j = jf+ncov+npersons
 			r[j] = r[j] + tmp * f[jf]
 
 		}

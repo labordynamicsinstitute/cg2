@@ -1,6 +1,9 @@
-
+* $Id$ 
+* $URL$
+*****
 ***** Sets parameters for estimation
 *****
+***** Requires the file $VARFILE.do
 *****
 
 ** Change line here if you want to include different covariates
@@ -8,24 +11,33 @@
 ** !! and the string
 
 global VARFILE ="variables"
+global personid ="pupilid"
+global firmid   ="schoolid"
+global CGIN ="cgin"
+global workingdir = "W:\projets\schooleffects\src\cg"
 
-cd "W:\projets\schooleffects\src\cg"
+global DEPENDENT = "y"
+global COVARIATES = "keystage1 keystage2"
+*** This should really be computed 
+global NCOV = 1
+
+cd $workingdir
 
 ********* DO NOT MODIFY AFTER THIS LINE
 
-use cgin, clear
-keep pupilid
-duplicates drop pupilid, force
+use $CGIN, clear
+keep $personid
+duplicates drop $personid, force
 global NPUPILS = "`=_N'"
 
-use cgin, clear
-keep schoolid
-duplicates drop schoolid, force
+use $CGIN, clear
+keep $firmid
+duplicates drop $firmid, force
 global NSCHOOLS = "`=_N'"
 
-use cgin, clear
-keep pupilid schoolid
-duplicates drop pupilid schoolid, force
+use $CGIN, clear
+keep $personid $firmid
+duplicates drop $personid $firmid, force
 global NCELLS = "`=_N'"
 
 clear
