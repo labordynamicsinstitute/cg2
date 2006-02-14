@@ -11,10 +11,10 @@
 ** !! and the string
 
 global VARFILE ="variables"
-global personid ="pupilid"
-global firmid   ="schoolid"
-global CGIN ="cgin"
-global workingdir = "W:\projets\schooleffects\src\cg"
+global personid ="pik"
+global firmid   ="sein"
+global CGIN ="wage_history_01"
+global workingdir = "."
 
 global DEPENDENT = "y"
 global COVARIATES = "keystage1 keystage2"
