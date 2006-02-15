@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+
+  
+  <title>Howto Compile the CG2 Source Code</title>
+</head>
+
+
+<body>
+<!-- Subversion info:
+$Date$
+$Rev$
+$HeadURL$
+$Author$
+                     -->
+
+<h2>HowTo Compile the CG2 Source Code</h2>
+
+<br>
+
+Download the source code <a href="downloads.html">here</a>.<br>
+
+<br>
+
+If you are using the Intel compilers, first make sure that your
+environment is properly set-up. &nbsp;Add the following lines into
+.bashrc, .cshrc, .login, or .profile depending on your default shell.
+&nbsp;The exact path may differ slightly depending on your installation
+and the version of the Intel compiliers you are using. &nbsp;This
+information is correct for the default install of Version 8.2 on
+&nbsp;IA32 Linux. &nbsp;The Sun compilers do not require any
+modification to your path.<br>
+
+<pre>source /opt/intel_fc_80/bin/ifortvars.sh<br>source /opt/intel_cc_80/bin/iccvars.sh<br>source /opt/intel/mkl72/tools/environment/mklvars32.sh<br></pre>
+
+<ol>
+
+  <li>Create a directory to hold the source code (suggest <span style="font-style: italic;">cg2f90</span>). &nbsp;</li>
+  <li>Within cg2f90 create two subdirectories, one named <span style="font-style: italic;">src</span> and the other named <span style="font-style: italic;">bin</span>. &nbsp;Within the src directory create two additional directories named; <span style="font-style: italic;">cg2_4v3</span> and <span style="font-style: italic;">groups</span>.</li>
+
+  <li>Copy the cg2.tar.gz file to the <span style="font-style: italic;">cg2_4v3</span> directory and the groups.tar.gz file to the <span style="font-style: italic;">groups</span> directory.</li>
+
+  <li>Un-tar each of the files (on Windows systems, WinZip should work).<br>
+(Alternatively, the four previous steps above are done automatically if using the full repository dump from&nbsp; <a href="http://repository.ciser.cornell.edu/viewcvs-public/cg2/trunk.tar.gz?view=tar">http://repository.ciser.cornell.edu/viewcvs-public/cg2/trunk.tar.gz?view=tar</a>. Download the file (<span style="font-style: italic;">trunk.tar.gz</span>), un-tar it, and rename the <span style="font-style: italic;">trunk</span> directory to <span style="font-style: italic;">cg2f90</span>)</li>
+
+  <li>If <span style="font-family: monospace;">make</span> is available on your system then you can use the Makefile
+to compile. &nbsp;Otherwise you can use the Makefile as a guide to
+compile the program manually. &nbsp;Type <span style="font-family: monospace;">make -f &lt;Makefile_xxxx&gt;</span>
+&nbsp;while in both the <span style="font-style: italic;">cg2_4v3</span> and <span style="font-style: italic;">groups</span> directory. &nbsp;The binaries should now be created..</li>
+
+  <li>Move each binary to the&nbsp;<span style="font-style: italic;">bin</span> directory.</li>
+
+  <li>Add the location of the binaries to your path.</li>
+
+</ol>
+
+The following lines will add the binaries to your path if they are
+installed in your home directory. &nbsp;If you are installing the
+binaries for multiple users, the binaries could be placed in a standard
+location such as /usr/local/bin.<br>
+
+<pre>#Include the CG Binaries in the path<br>export PATH=$PATH:~/cg2f90/bin<br><br></pre>
+You should now be ready to run cg2_4v3 and the grouping program, groups.<br>
+<br>
+
+Return to the <a href="HowTo.html">HowTo</a> or <a href="index.html">Main</a> page.
+</body>
+</html>

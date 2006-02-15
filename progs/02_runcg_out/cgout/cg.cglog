@@ -1,0 +1,33 @@
+Number of observations           49
+Number of distinct cells         11
+Number of persons                 8
+Number of firms                   5
+Number of covariates              1
+
+
+Input parameters file: cg.cgin                                                         
+Output log file:       cg.cglog                                                        
+Binary data file:      cg.bin4                                                         
+Output beta file:      cg.betas                                                        
+Output means file:     cg.means                                                        
+
+
+Allocated integer variables          0 megabytes
+Allocated double variables           0 megabytes
+Total memory allocated               0 megabytes
+
+Starting to read and preprocess data
+Finished reading and preprocessing - starting preconditioning
+
+Means - dependent variable, covariates
+
+  0.1083406E+02  0.3894796E+02
+
+ Finished Cholesky part 1 DPOTRF
+Beginning conjugate gradient iterations
+ Iteration    0 Norm of residual 0.372835221E+00 Relative error 0.100000000E+01
+ Iteration    1 Norm of residual 0.148958095E+00 Relative error 0.399527959E+00
+ Iteration    2 Norm of residual 0.184255734E-01 Relative error 0.494201521E-01
+ Iteration    3 Norm of residual 0.126289316E+00 Relative error 0.338726894E+00
+ Iteration    4 Norm of residual 0.590717699E-14 Relative error 0.158439349E-13
+ Iteration    5 Norm of residual 0.301731344E-14 Relative error 0.809288733E-14

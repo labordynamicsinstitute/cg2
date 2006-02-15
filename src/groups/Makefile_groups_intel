@@ -1,0 +1,6 @@
+FFLAGS =   -O3 
+FLDFLAGS = -L/opt/intel/mkl72/lib/32 -lmkl_lapack -lmkl_p4 -lmkl_lapack32 -lmkl
+FC = ifort
+SRCS = my_data.f90 groups.master.f90
+exe:     $(SRCS)
+	$(FC) $(FFLAGS) $(SRCS) -o groups $(FLDFLAGS) 
