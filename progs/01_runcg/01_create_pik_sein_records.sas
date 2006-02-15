@@ -1,10 +1,15 @@
+*** $Id$ ;
+*** $URL$ ;
+***;
+*** Original author: Kevin McKinney ;
+***;
 *** Create some fake PIK SEIN records to use as test data for CG2 ***; 
 
 options obs=max ls=180 ps=10000 mprint mlogic symbolgen;
 
 %include "./config_param.sas";
 
-data cg.wage_history_01;
+data MYWORK.wage_history_01;
 
   length pik $2 sein $3 year 4;
 

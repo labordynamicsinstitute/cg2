@@ -1,10 +1,13 @@
+*** $Id$ ;
+*** $URL$ ;
+***;
+*** Original author: Kevin McKinney ;
+***;
 *** Get information required to calculate problem size ***;
 *** Calculate step1 information required to run cg ***;
 *** Binary file will be output in a separate program ***;
 
 %include './config_param.sas';
-
-*options obs=1000;
 
 *** Variables to fill ***;
 
@@ -13,10 +16,12 @@
 %let NNPERS=0;
 %let NNFIRM=0;
 
-*** Get the sample size (NN) ***;
+/*BEGINCCC
+	 Get the sample size (NN) 
+CCCEND*/
 
 data strip01(keep=pik sein year);
-   set cg.wage_history_01;
+   set MYWORK.wage_history_01;
 run;
 
 proc contents data=strip01 out=tmp;
@@ -27,7 +32,9 @@ data tmp;
     if _n_ = 1 then call symput('NN',nobs);
 run;
 
-*** Get the number of firms (NNFIRM) ***;
+/*BEGINCCC
+	Get the number of firms (NNFIRM) 
+CCCEND*/
 
 proc sort data=strip01(keep=pik sein) out=strip nodupkey;
   by sein pik;
@@ -61,9 +68,10 @@ proc sort data=strip nodupkey;
   by pik sein; 
 run; 
 
-data cg.strip02 cg._lookup(keep=pik sein persseq firmseq) person(keep=persseq);
-  merge strip01 strip;
-    by pik sein;
+data MYWORK.strip02 
+     MYWORK._lookup(keep=pik sein persseq firmseq) person(keep=persseq);
+     merge strip01 strip;
+     by pik sein;
 
   retain persseq (0);
 
@@ -77,15 +85,17 @@ data cg.strip02 cg._lookup(keep=pik sein persseq firmseq) person(keep=persseq);
   if first.sein then do;
      /* create cellsout */
      put persseq 1-12 firmseq 14-26 ;
-     output cg._lookup;
+     output MYWORK._lookup;
   end;
-  output cg.strip02;
+  output MYWORK.strip02;
 run;
 
-proc contents data=cg.strip02;
+proc contents data=MYWORK.strip02;
 run;
 
-*** Get the number of persons (NNPERS) ***;
+/*BEGINCCC
+ Get the number of persons (NNPERS) 
+CCCEND*/
 
 proc contents data=person out=tmp; 
 run; 
@@ -95,7 +105,9 @@ data tmp;
     if _n_ = 1 then call symput('NNPERS',nobs); 
 run;
 
-*** Get the number of PIK SEIN cells (NCELLS) ***;
+/*BEGINCCC
+ Get the number of PIK SEIN cells (NCELLS) 
+CCCEND*/
 
 proc contents data=strip out=tmp;
 run;
@@ -105,6 +117,8 @@ data tmp;
     if _n_ = 1 then call symput('NCELLS',nobs);
 run;
 
-*** Pull all the information together ***;
+/*BEGINCCC
+ Pull all the information together and generate some output.
+CCCEND*/
 
-%put cg.cgin:  &NN &NCELLS &NNPERS &NNFIRM;
+%put MYWORK.cgin:  &NN &NCELLS &NNPERS &NNFIRM;

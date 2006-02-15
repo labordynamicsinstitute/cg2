@@ -1,72 +1,39 @@
+*** $Id$ ;
+*** $URL$ ;
+***;
+*** Original author: Kevin McKinney ;
+***;
 *** Config file for creation of CG input file ***;
 
-** binvars=depvar rhs **;
+/*BEGINCCC
+	The binvars macro variable should contain a list beginning with the
+	dependent variable followed by each right hand side variable (do not
+	include a constant, do not include the identifiers).
+CCCEND*/
+
+** Syntax: binvars=depvar rhs **;
 ** perseq and firmseq are automatically included **;
 
 %let binvars=learn exper;
 
-%put "binvars=" &binvars;
-
 ** Location of input data files **;
 
-   libname inputs '/home/kmckinney/ciser_data';
+   libname inputs '/path/to/my/inputs';
 
-*** location of the output directory ***;
+*** location of the output from SAS, input to CG ***;
 
-   %let cellout=/home/kmckinney/runcg8_out;
+   %let cellout=../02_runcg_out;
 
-*** Output ***;
+*** Working output ***;
 
-libname cg "&cellout.";
-libname dot '.';
+   libname mywork ".";
+   libname dot ".";
 
 *** MACROS ***;
 
-*** Create libnames ***;
-%macro aelibs;
-   %let i=1;
-   %let st=%scan(&states,&i);
-   %do %until ("&st"="");
-     libname ae&st "/data/master/hc_estimates/v1.2/&st";
-     libname ehf&st "/data/production/prod/current/ehf/&st";
-     libname icf&st "/data/production/prod/current/icf/&st";
-     %let i=%eval(&i+1);
-     %let st=%scan(&states,&i);
-   %end;
-%mend;
-
-*** Interleave set statement ***;
-%macro set_ae;
-   set
-   %let i=1;
-   %let st=%scan(&states,&i);
-   %do %until ("&st"="");
-      /* Create the set statement */
-      ae&st..annearn06 (keep=&keepae6)
-     %let i=%eval(&i+1);
-     %let st=%scan(&states,&i);
-   %end;;
-%mend;
-
-*** Data view ***;
-
-*** Macro to Create a Data View of the Annearn Files ***;
-
-%macro aeview;
-   data aestack /view=aestack;
-   %let i=1;
-   %let st=%scan(&states,&i);
-   set
-   %do %until ("&st"="");
-     ae&st..annearn06(keep=&keepae6)
-     %let i=%eval(&i+1);
-     %let st=%scan(&states,&i);
-   %end;;
-     by pik sein year;
-   run;
-%mend;
-
-*** Calculate the length of a record in the binary file ***;
+/*BEGINCCC
+	 Calculate the length of a record in the binary file
+CCCEND*/
 
 %macro bincalc(len);
    %global binlen;
@@ -80,3 +47,16 @@ libname dot '.';
    %put "bin length= " &binlen;
    %put "num coef= " %eval(&i-1);
 %mend;
+
+/*BEGINCCC
+	Put all macros specific to your site in 
+        this external file.
+CCCEND*/
+
+%include "./site_macros.sas";
+
+/*BEGINCCC
+	Generate some output.
+CCCEND*/
+
+%put "binvars=" &binvars;
