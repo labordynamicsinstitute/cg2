@@ -27,6 +27,8 @@ defvar
 
 mata
 
+mata set matalnum on
+
 function maincg(string rowvector covariates) {
 
 	real scalar i, j, jp, jf;
@@ -39,19 +41,17 @@ function maincg(string rowvector covariates) {
 
 	printf("Loading data in Mata ...\n");
 
-	printf("Covariates\n");
+	printf("Covariates:         $NCOV\n");
 	st_view(cov=., 	., covariates)
 
-	printf("Dependent variable\n");
+	printf("Dependent variable: $DEPENDENT\n");
 	st_view(y=., 	., "$DEPENDENT")
 
-	printf("Person IDs\n");
+	printf("Person ID:          $personid\n");
 	st_view(person=., 	., "$personid")
 
-	printf("Firm IDs\n");
+	printf("Firm ID  :          $firmid\n");
 	st_view(firm=., ., "$firmid")
-
-	printf("Dependent variable : $DEPENDENT\n");
 
 	printf("Problem Size ...\n");
 
@@ -400,7 +400,8 @@ void xtprod(real vector persons, real vector firms, real matrix cov,
 	
 	r[1..ncov] = cross(cov,s)
 
-}
+} 
+/* end of maincg definition */
 
 maincg(veccov);
 
