@@ -58,13 +58,13 @@ the results from our reference system.<br>
 
   <li>Set up the values in <span style="font-style: italic;">config_param.sas</span>. &nbsp;The <span style="font-family: monospace;">binvars</span> macro
 variable should contain a list beginning with the dependent variable
-followed by each right hand side variable (do not include a constant,
+followed by each right hand side variable. Do not include a constant,
 it is absorbed in the person effect. Be careful as well specifying your
 model to insure that no linear combinations of your right side variables are included. &nbsp;Since
 CG2 never inverts X'X&nbsp;no check is made to insure that your
 specification is identified. &nbsp;CG2 will produce output, but it will
 be incorrect. &nbsp;If you are unsure of your specification run a regression using
-PROC GLM with the <span style="font-family: monospace;">absorb pik sein</span> option.).
+PROC GLM with the <span style="font-family: monospace;">absorb pik sein</span> option.
 &nbsp;The <span style="font-family: monospace;">inputs</span> variable is not required but can be used in your
 programs when creating the input file. &nbsp;The macro variable <span style="font-family: monospace;">cellout</span>
 should point to the directory where you would like the binary file to
@@ -76,8 +76,9 @@ the fastest disk structure available on your system.</li>
   <li>Run the <span style="font-style: italic;">01_create_pik_sein_records.sas</span> program to create
     <span style="font-style: italic;">cg.wage_history_01.sas7bdat </span>&nbsp;or prepare your own&nbsp;file with
 the same name. &nbsp;The file must be sorted by person ID (pik) firm ID
-(sein) and time (year, quarter, week, etc.), with no duplicates (A
-person should only have one employer in each period).</li>
+(sein) and any other unique record identifier (time, family, etc.), with no
+    duplicates. In the example, (pik sein year) constitute a unique record
+    identifier, but only (pik sein) are needed for the estimation. </li>
 
 
   <li>Run the <span style="font-style: italic;">02 _size_calc.sas</span> program to determine the size of the
@@ -115,8 +116,8 @@ whole process must be repeated.</li>
 
 
 You are likely to run CG2 multiple times while conducting your data
-analysis. &nbsp;It is a good idea to create a SAS dataset in pik sein
-year sort order containing all of the variables and records you would
+analysis. &nbsp;It is a good idea to create a SAS dataset in the right sort
+order (in the example: pik sein year) containing all of the variables and records you would
 like to use. &nbsp;This dataset will ideally be created only once.
 &nbsp;For each succeeding analysis you can select the sample you would
 like to use for each run in the <span style="font-style: italic;">02_size_calc.sas</span> and <span style="font-style: italic;">04_get_binary4.sas</span>
