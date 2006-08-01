@@ -12,10 +12,33 @@ $HeadURL$
 $Author$
                      -->
 <h2>Sample SAS Code to Calculate the Number of Cells</h2>
-<pre>libname dot '.';<br><br>proc sort data=dot.in(keep=personid firmid);<br>   by personid firmid;<br>run;<br><br>data out;<br>   set dot.in;<br>      by personid firmid;<br><br>   if first.firmid then output;<br>run;</pre>
-<pre>/* The number of observations in the proc contents */</pre>
-<pre>/* is the number of cells in your data &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   */</pre>
-<pre><br>proc contents data=out;</pre>
-<pre>run;</pre>
+<pre>
+/* Set the filename here, 
+   excluding the extension,
+   including the already-defined libname.
+*/
+%let dataset=libname.inputname;
+%let personid=personid;
+%let firmid=firmid;
+
+proc sort data=&dataset.(keep=&personid. &firmid.);
+   by &personid. &firmid.;
+run;
+
+data out;
+   set dot.in;
+      by &personid. &firmid.;
+
+   if first.&firmid. then output;
+run;
+
+%let dsid = %sysfunc(open(out));
+%let nobs=%sysfunc(attrn(&dsid,nobs));
+%let rc = %sysfunc(close(&dsid));
+
+%put =================================================;
+%put   Your data &dataset. has &nobs. cells ;
+%put =================================================;
+</pre>
 </body>
 </html>
