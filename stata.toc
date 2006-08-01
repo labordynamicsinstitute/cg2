@@ -8,4 +8,5 @@ d Abowd, Kramarz, and Margolis (Econometrica, 1999) and
 d Abowd, Creecy, and Kramarz (2002).
 d Author's Homepage: {browse "http://www.carva.org/amine.ouazad":http://www.carva.org/amine.ouazad}
 
+p a2reg Package to estimate regressions with two-way fixed effects.
 p a2group Grouping Program - Imposes the identification constraints for the two-way fixed effects regression 
