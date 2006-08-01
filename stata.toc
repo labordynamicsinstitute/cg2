@@ -1,11 +1,11 @@
 v 3
 
-d Amine Ouazad's Two-way fixed effects regressions (identification 
-d restrictions & regression). Based on the ideas in {browse "CG2":http://vrdc.ciser.cornell.edu/cg2/}
-d Also see the references at {browse "http://vrdc.ciser.cornell.edu/news/?p=140":http://vrdc.ciser.cornell.edu/news/?p=140}, 
-d in particular: Abowd, Kramarz, and Margolis (Econometrica, 1999) 
-d and Abowd, Creecy, and Kramarz (2002).
+d Amine Ouazad's Two-way fixed effects regressions 
+d Amine Ouazad's Two-way fixed effects regressions (with identification 
+d restrictions & regression). Based on the ideas in {browse "CG2":http://vrdc.ciser.cornell.edu/cg2/}. Also see the references at 
+d {browse "http://vrdc.ciser.cornell.edu/news/?p=140":http://vrdc.ciser.cornell.edu/news/?p=140}, in particular: 
+d Abowd, Kramarz, and Margolis (Econometrica, 1999) and 
+d Abowd, Creecy, and Kramarz (2002).
 d Author's Homepage: {browse "http://www.carva.org/amine.ouazad":http://www.carva.org/amine.ouazad}
 
-p a2group Grouping Program - Imposes the identification constraints 
-p for the two-way fixed effects regression 
+p a2group Grouping Program - Imposes the identification constraints for the two-way fixed effects regression 
