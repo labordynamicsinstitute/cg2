@@ -1,29 +1,72 @@
-********************************************************
-*
-* 	Conjugate gradient
-*
-********************************************************
 
-********************************************************
-** Loading data for CG algorithm
-********************************************************
+program define a2reg
+* A2REG uses mata, therefore requires version 9
+version 9
+
+* Syntax: a2reg depvar indepvars, individual(first fixed effect) unit(second fixed effect) save(output file)
+syntax varlist(min=2), individual(varname) unit(varname) [prefix(name)] [save(name)]
 
 
 
-do params.do
+* Checks whether all variables are numeric
 
-use cgin
-sort pupilid schoolid
+foreach v in `varlist' {
+	confirm numeric variable `v'
+}
 
-set more off 
+gettoken dependent varlist : varlist
 
-mata: mata clear
+tempvar indid unitid cellid
 
-defvar
+if ("`save'"=="") {
+	tempfile save
+}
+
+if ("`prefix'"=="") {
+	local prefix "effect"
+}
+
+* Creating sequenced ID variables
+
+egen `indid'  = group(`individual')
+egen `unitid' = group(`unit')
+egen `cellid' = group(`indid' `unitid')
+
+* Getting the size of the problem
+
+sort `indid'
+summarize `indid', meanonly 
+local ninds = r(max) 
+
+sort `unitid'
+summarize `unitid', meanonly 
+local nunits = r(max) 
+
+sort `cellid'
+summarize `cellid', meanonly 
+local ncells = r(max) 
+
+sort `indid' `unitid'
+
+* Launches the Conjugate gradient estimation
+* Note : the program fails when explanatory variables are not linearly independent
+
+mata: maincg("`dependent'",tokens("`varlist'"),"`indid'","`unitid'", `ninds', `nunits', `ncells', "`save'")
+mata: addresultscg("`dependent'",tokens("`varlist'"),"`indid'","`unitid'", `ninds', `nunits', `ncells', "`save'","`prefix'")
+
+summarize indeffect, meanonly
+local mean_ie = r(mean)
+
+replace indeffect = indeffect - `mean_ie'  
+
+end
 
 mata
 
-function maincg(string rowvector covariates) {
+function maincg(string scalar dependent, string rowvector covariates,
+				string scalar individualid, string scalar unitid,
+				real scalar npupils, real scalar nschools,
+				real scalar ncells, string scalar filerawoutput) {
 
 	real scalar i, j, jp, jf;
 	real vector dfp, dff, df, d;
@@ -39,23 +82,22 @@ function maincg(string rowvector covariates) {
 	st_view(cov=., 	., covariates)
 
 	printf("Dependent variable\n");
-	st_view(y=., 	., "$DEPENDENT")
+	st_view(y=., 	., dependent)
 
 	printf("Pupil IDs\n");
-	st_view(pupil=., 	., "pupilid")
+	st_view(pupil=., 	., individualid)
 
 	printf("School IDs\n");
-	st_view(school=., ., "schoolid")
+	st_view(school=., ., unitid)
 
-	printf("Dependent variable : $DEPENDENT\n");
+	printf("Dependent variable : %s\n", dependent);
+
+	printf("Covariates : %s\n", covariates);
 
 	printf("Problem Size ...\n");
 
-	n 		= 	length(y);
+	n 		    = 	length(y);
 	ncov		=	cols(cov);
-	npupils 	=	$NPUPILS;
-	nschools	=	$NSCHOOLS;
-	ncells	=	$NCELLS;
 	ncoef		= 	npupils + nschools + ncov - 1;
 
 	printf("%f observations, %f covariates, %f pupils, %f schools, %f cells\n",n,ncov,npupils,nschools,ncells);
@@ -87,26 +129,33 @@ function maincg(string rowvector covariates) {
 		}
 
 		/* Construction de d */
+		//printf("d ");
 		jp = pupil[i]
 		d[jp] = d[jp] + 1
 
 		/* Construction de dfp */
+		//printf("dfp ");
 		dfp[icell] = jp
 
 		/* Construction de f */
+		//printf("f ");
 		jf = school[i]
 		f[jf] = f[jf] + 1
 
 		/* Construction de dff */
+		//printf("dff ");
 		dff[icell] = jf
 
 		/* Construction de df */
+		//printf("df ");
 		df[icell] = df[icell] + 1
 
 		for ( j = 1; j <= ncov ; j++ ) {
 		/* Construction de XD et XF */
 	
+			//printf("xd ");
 			xd[jp,j] = xd[jp, j] + cov[i, j]
+			//printf("xf ");
 			xf[jf,j] = xf[jf, j] + cov[i, j]
 		}
 	}
@@ -221,7 +270,7 @@ function maincg(string rowvector covariates) {
 
 	/** Writes estimation results in file cgout */
 
-	fp = fopen("cgout_$STANDARDIZE_$TRANSFORMATION_$DEPENDENT","w");
+	fp = fopen(filerawoutput,"w");
 
 	fputmatrix(fp, theta);
 
@@ -398,6 +447,82 @@ void xtprod(real vector pupils, real vector schools, real matrix cov,
 
 }
 
-maincg(veccov);
+function addresultscg(string scalar dependent, string rowvector covariates,
+				string scalar individualid, string scalar unitid,
+				real scalar npupils, real scalar nschools,
+				real scalar ncells, string scalar filerawoutput,
+
+				string scalar prefix) {
+
+
+
+
+	real scalar ncov;
+
+
+
+	ncov = length(covariates);	
+
+
+
+	fp = fopen(filerawoutput,"r")
+
+	params = fgetmatrix(fp);
+
+	
+
+	betas = params[1 .. ncov];
+
+	pupileffects = params[ncov+1 .. ncov + npupils];
+
+	schooleffects = params[ncov+npupils+1 .. ncov + npupils + nschools -1];
+
+
+
+	st_addvar("double", "indeffect");
+
+	st_addvar("double", "uniteffect");	
+
+	st_view(data, . ,(individualid, unitid, "indeffect","uniteffect"));
+
+
+
+	n = rows(data);
+
+	printf(" %f observations ", n);
+
+
+
+	for (i = 1; i<= n ; i ++) {
+
+		data[i,3] = pupileffects[data[i,1]];
+
+		if (data[i,2] != nschools) {
+
+			data[i,4] = schooleffects[data[i,2]];
+
+		} else {
+
+			data[i,4] = 0;
+
+		}
+
+	}
+
+	
+
+	for (i = 1; i<= ncov; i++) {
+
+		stata(sprintf("gen %s_%s = %f", prefix, covariates[i], betas[i]));
+
+		stata(sprintf("label variable %s_%s %s Coefficient for %s %s ", prefix, covariates[i], char(34),covariates[i],char(34)));
+
+	}
+
+}
+
+
 
 end
+
+

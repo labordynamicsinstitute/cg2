@@ -1,0 +1,7 @@
+v 3
+
+d Amine's attic
+d Two-way fixed effects regressions (identification restrictions & regression)
+d My Homepage: {browse "http://www.carva.org/amine.ouazad":http://www.carva.org/amine.ouazad}
+
+p a2group Grouping Program - Imposes the identification constraints for the two-way fixed effects regression 

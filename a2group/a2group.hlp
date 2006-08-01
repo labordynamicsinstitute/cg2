@@ -1,0 +1,65 @@
+{smcl}
+{hline}
+help for {hi:a2group}
+{hline}
+
+{title:Creates mobility groups for the identification of two-way fixed effects}
+
+{p 8 27}
+{cmdab:a2group} ,
+[
+{cmdab:individual}{cmd:(}{it:varname}{cmd:)}
+{cmdab:unit}{cmd:(}{it:varname}{cmd:)}
+{cmdab:groupvar}{cmd:(}{it:varname}{cmd:)}
+]
+replace
+
+{p}
+
+{title:Description}
+
+{p 0 0}
+{hi:a2group} creates a new variable {it:groupvar} containing the mobility group 
+which the individual and the unit belong to. Within these mobility groups, two-way
+fixed effects can be estimated, with {it:individual} indexing the first fixed effect,
+and {it:unit} indexing the second fixed effect. 
+
+{title:Options}
+
+{cmdab:individual}{cmd:(}{it:varname}{cmd:)} is the identifier for the first fixed effect.
+Typically, {it:varname} will be an person's ID, such as an employee ID. 
+
+{cmdab:unit}{cmd:(}{it:varname}{cmd:)} is the identifier for the second fixed effect.
+Typically, {it:varname} will be a unit ID, such as a firm ID. 
+
+{cmdab:groupvar}{cmd:(}{it:groupvar}{cmd:)} is the name of the new variable containing
+the identifier of the mobility group.
+
+The {hi:replace} option is mandatory. It warns the user that the dataset will be altered.
+
+{title:Examples}
+
+Using the variable {hi:length} from the {hi:auto} data (click on the following commands in order):
+
+{stata a2group, individual(personid) unit(firmid) replace}
+
+{title:Author}
+
+{p}
+Amine Ouazad, Centre de Recherche en Economie et Statistique (CREST-INSEE).
+
+Email {browse "mailto:amine.ouazad@ensae.fr":amine.ouazad@ensae.fr}
+
+{title:Acknowledgement}
+
+{p}
+This command is part of a direct port of the FORTRAN cg program that was written by
+{bf: Robert Creecy} and {bf:Lars Vilhuber} for Unix platforms.
+
+{title:Also see}
+
+{help a2reg} (if installed)
+
+
+
+

@@ -1,0 +1,6 @@
+v 3
+d a2group.  Package to make mobility groups for the identification of two-way fixed effects.
+d Ported by Amine Ouazad, from the FORTRAN program by Robert Creecy and Lars Vilhuber
+
+f a2group/a2group.ado
+f a2group/a2group.hlp
