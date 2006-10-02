@@ -92,7 +92,7 @@ function maincg(string scalar dependent, string rowvector covariates,
 
 	printf("Dependent variable : %s\n", dependent);
 
-	printf("Covariates : %s\n", covariates);
+
 
 	printf("Problem Size ...\n");
 
