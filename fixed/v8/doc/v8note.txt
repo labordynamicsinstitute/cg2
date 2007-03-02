@@ -1,0 +1,28 @@
+This version, cg2_4v8, allows the user to specify a subset of the
+covariates in the binary input file xxx.bin4 by preparing an xxx.vars
+file that lists the variable names and indicies within the file.
+It also uses these names to label output in the xxx.cglog, xxx.means 
+and xxx.betas files. The formats of the xxx.means and xxx.betas files
+are the same as before with the variable names appended to the output line.
+If no xxx.vars file exists, all variables are selected and the default 
+names Y and X1,X2 etc are used.
+
+If the user decides to use a subset of the covariates, the number of covariates
+in the xxx.cgin file is the number in the subset, not the total number of covariates.
+
+The format of the xxx.vars file is one line for each variable, starting
+with the dependent variable, then the covariates, then the person variable and
+lastly the firm variable. By convention, the program assumes the firm variable
+is the last variable on the input record. 
+
+Each line has a variable name and an index within the xxx.bin4 file. The indices
+MUST be in ascending order. For example, with 3 of 5 covariates selected
+the file xxx.vars would be:
+
+LogWages  1
+cov1      2
+cov3      4
+cov5      6
+person    7
+firm      8	 
+
