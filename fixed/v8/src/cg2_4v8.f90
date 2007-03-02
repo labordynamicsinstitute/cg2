@@ -1,6 +1,7 @@
       program cg2_4v8
       use MY_DATA
       implicit none
+! Revision 3/2/2007 RHC - differs from cg2_4v5 by allowing covariate selection in file xxx.vars
 ! Revision 6/8/2006 RHC - differs from cg2_4v3 by transposing xd, xf and reading large blocks of input
       INTEGER*4 i,j,jp,jf,k,maxit,icell,info, imem,idmem,err,LRECL, nrecsperblock, iblock, itime
       INTEGER*4 persi,persim1,firmi,firmim1,logunit, int4, nvar, nvarin, nmax, ierr
@@ -69,11 +70,11 @@
             invars(i) = i
             write(logunit,17) varnames(i), invars(i)
          end do
-         i = ncov+1
+         i = ncov+2
          varnames(i) = 'person'
          invars(i) = i
          write(logunit,17) varnames(i), invars(i)
-         i = i+1
+         i = ncov+3
          varnames(i) = 'firm'
          invars(i) = i
          write(logunit,17) varnames(i), invars(i)
