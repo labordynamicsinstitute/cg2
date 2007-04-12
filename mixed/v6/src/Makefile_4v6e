@@ -1,0 +1,19 @@
+.SUFFIXES:	.o .f90
+
+.f90.o:	
+	$(FC) $(FFLAGS) -c $<
+
+FFLAGS =  -O3  
+FLDFLAGS =-lscs
+FC = ifort
+OBJS = my_datav6.o matvec2v5.o   modcgv4.o vmean.o cg2_4v6emix.o   genranvec.o 
+SRCS = my_datav6.f90 matvec2v5.f90   modcgv4.f90 vmean.f90 cg2_4v6emix.f90   genranvec.f90 
+
+exe:     $(OBJS)
+	$(FC) $(FFLAGS) $(OBJS) -o cg2_4v6emix $(FLDFLAGS)
+
+dbg:	$(OBJS)
+	$(FC) -g  $(SRCS) -o cg2_4v6emixdbg  $(FLDFLAGS)
+
+
+        
