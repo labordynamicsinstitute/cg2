@@ -148,7 +148,7 @@
       write(logunit,50)  time(itime)-time(itime-1)
 50    format("Finished allocating and initializing variables, times: ",2F12.2)
       itime = itime + 1
-      open(unit=8,file=fnbin4,form="UNFORMATTED",recl=LRECL,status="OLD",READONLY)
+      open(unit=8,file=fnbin4,form="UNFORMATTED",recl=LRECL,status="OLD",action="READ")
       persim1 = 0
       firmim1 = 0
       ybar = 0.0D0
