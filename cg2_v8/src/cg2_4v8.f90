@@ -64,7 +64,8 @@
 17       format(A20,I3)
          do i=2,ncov+1
             varnames(i) = 'X' 
-            encode(3,18,varsuffix) i-1
+            j = i-1
+            encode(3,18,varsuffix) j
 18          format(i3)
             varnames(i) = trim(varnames(i)) // adjustl(varsuffix)
             invars(i) = i
@@ -147,7 +148,7 @@
       write(logunit,50)  time(itime)-time(itime-1)
 50    format("Finished allocating and initializing variables, times: ",2F12.2)
       itime = itime + 1
-      open(unit=8,file=fnbin4,form="BINARY",recl=LRECL,status="OLD",READONLY)
+      open(unit=8,file=fnbin4,form="BINARY",recl=LRECL,status="OLD",READ)
       persim1 = 0
       firmim1 = 0
       ybar = 0.0D0
