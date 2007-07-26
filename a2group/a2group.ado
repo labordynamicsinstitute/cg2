@@ -26,6 +26,8 @@ quietly {
 
 preserve
 
+	confirm new variable `groupvar'
+
 	keep `individual' `unit'
 
 	tempvar indid unitid 
