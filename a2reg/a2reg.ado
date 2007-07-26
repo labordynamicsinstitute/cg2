@@ -15,10 +15,10 @@ program define a2reg, sortpreserve eclass;
 /*
  *
  * A2REG uses mata, therefore requires version 9
- * May work with earlier versions than 9.2
+ * May work with earlier versions than 9.1
  *
  */
-version 9.2;
+version 9.1;
 
 /* 
  * Syntax: a2reg depvar indepvars, 
