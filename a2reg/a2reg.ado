@@ -25,12 +25,46 @@ version 9.1;
  *	individual(first fixed effect) unit(second fixed effect) save(output file)
  */
 
-syntax varlist(min=2) [if] [in], individual(varname) unit(varname) ;
+syntax varlist(min=2) [if] [in], individual(varname) unit(varname) 
+		[indeffect(name)] [uniteffect(name)]
+		[resid(name)] [xb(name)];
 
 /* Checks whether all variables are numeric */
 quietly {;
 foreach v in `varlist' {;
 	confirm numeric variable `v';
+};
+
+if ("`indeffect'"!="") {;
+	confirm new variable `indeffect';
+};
+
+if ("`indeffect'"=="") {;
+	tempvar indeffect;
+};
+
+if ("`uniteffect'"!="") {;
+	confirm new variable `uniteffect';
+};
+
+if ("`uniteffect'"=="") {;
+	tempvar uniteffect;
+};
+
+if ("`resid'"!="") {;
+	confirm new variable `resid';
+};
+
+if ("`resid'"=="") {;
+	tempvar resid;
+};
+
+if ("`xb'"!="") {;
+	confirm new variable `xb';
+};
+
+if ("`xb'"=="") {;
+	tempvar xb;
 };
 
 preserve;
@@ -73,28 +107,37 @@ sort `indid' `unitid';
 mata: maincg("`dependent'",tokens("`varlist'"),"`indid'","`unitid'", `ninds', `nunits', `ncells', "`save'");
 
 quietly{;
-mata: addresultscg("`dependent'",tokens("`varlist'"),"`indid'","`unitid'", `ninds', `nunits', `ncells', "`save'","`prefix'");
+	gen double `indeffect' = .;
+	gen double `uniteffect' = .;
+	gen double `xb' = .;
+};
+
+quietly{;
+mata: addresultscg("`dependent'",tokens("`varlist'"),"`indid'","`unitid'", `ninds', `nunits', `ncells', "`save'","`indeffect'","`uniteffect'","`xb'");
 };
 
 /* Computes the residual */
-quietly gen resid = `dependent' - xb - indeffect - uniteffect;
+if ("`resid'" == "") {;
+	tempvar resid;
+};
+quietly gen `resid' = `dependent' - `xb' - `indeffect' - `uniteffect';
 
 /* The constant is absorbed in the average of the individual effects */
-quietly summarize indeffect;
+quietly summarize `indeffect';
 local sdind = r(sd);
 local mean_ie = r(mean);
-quietly replace indeffect = indeffect - `mean_ie';
+quietly replace `indeffect' = `indeffect' - `mean_ie';
 
 quietly summarize `indid';
 local dfind = r(max);
 
-quietly summarize uniteffect;
+quietly summarize `uniteffect';
 local sdunit = r(sd);
 
 quietly summarize `unitid';
 local dfunit = r(max);
 
-quietly summarize resid;
+quietly summarize `resid';
 local var_resid = r(Var);
 local rss 	= r(Var)*(r(N)-1);
 
@@ -102,7 +145,7 @@ quietly summarize `dependent';
 local var_dependent = r(Var);
 local rss_dependent = r(Var)*(r(N)-1);
 
-quietly corr indeffect uniteffect;
+quietly corr `indeffect' `uniteffect';
 local rho = r(rho);
 
 local r2 	= 1.0 - `rss'/`rss_dependent';
@@ -577,7 +620,9 @@ function addresultscg(string scalar dependent, string rowvector covariates,
 				string scalar individualid, string scalar unitid,
 				real scalar npupils, real scalar nschools,
 				real scalar ncells, string scalar filerawoutput,
-				string scalar prefix) {
+				string scalar indeffect,
+				string scalar uniteffect,
+				string scalar xb) {
 
 	real scalar ncov;
 	string scalar cmd_listcovnames; 
@@ -588,10 +633,8 @@ function addresultscg(string scalar dependent, string rowvector covariates,
 	betas = params[1 .. ncov];
 	pupileffects = params[ncov+1 .. ncov + npupils];
 	schooleffects = params[ncov+npupils+1 .. ncov + npupils + nschools -1];
-
-	st_addvar("double", "indeffect");
-	st_addvar("double", "uniteffect");	
-	st_view(data, . ,(individualid, unitid, "indeffect","uniteffect"));
+	
+	st_view(data, . ,(individualid, unitid, indeffect,uniteffect));
 
 	n = rows(data);
 	
@@ -604,16 +647,17 @@ function addresultscg(string scalar dependent, string rowvector covariates,
 		}
 	}
 	
-
-	stata("quietly gen xb = 0");
-
 	cmd_listcovnames  =	"";
 	cmd_listcovvalues = 	"";
 
-	for (i = 1; i<= ncov; i++) {
+	cmd_listcovnames 	= sprintf("%s %s",cmd_listcovnames, covariates[1]);
+	cmd_listcovvalues	= sprintf("%s %g,",cmd_listcovvalues, betas[1]);
+	stata(sprintf("quietly replace %s = %g * %s",xb,betas[1], covariates[1]));
+	
+	for (i = 2; i<= ncov; i++) {
 		cmd_listcovnames 	= sprintf("%s %s",cmd_listcovnames, covariates[i]);
 		cmd_listcovvalues	= sprintf("%s %g,",cmd_listcovvalues, betas[i]);
-		stata(sprintf("quietly replace xb = xb + %g * %s",betas[i], covariates[i]));
+		stata(sprintf("quietly replace %s = %s + %g * %s",xb,xb,betas[i], covariates[i]));
 	}
 
 	stata(sprintf("matrix input betas = (%s)",cmd_listcovvalues));
