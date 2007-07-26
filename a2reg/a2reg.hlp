@@ -1,10 +1,83 @@
-{smcl}{hline}help for {hi:a2reg}{hline}{title:Estimates two-way fixed effects}{p 8 27}{cmdab:a2reg} {it:depvar} {it:indepvars},{cmdab:individual}{cmd:(}{it:varname}{cmd:)}{cmdab:unit}{cmd:(}{it:varname}{cmd:)}
-[
-{cmdab:save}{cmd:(}{it:filename}{cmd:)}
-{cmdab:prefix}{cmd:(}{it:name}{cmd:)}
-]{p}{title:Description}{p 0 0}{hi:a2reg} estimates two-way fixed effects, with {it:individual} indexing the first fixed effect, and {it:unit} indexing the second fixed effect. The dependent variableis {it:depvar} and the covariates are in {it:indepvars}. At least one covariateis mandatory.{title:Identification constraints}The identification constraints for the fixed effects are set by conventionsuch that the sum of individual effects is equal to zero and such that the last unit fixed effect is zero.{title:Options}{it:depvar} is the dependent variable. No missing observation is allowed.{it:indepvars} lists explanatory variables. No missing observation is allowed.{cmdab:individual}{cmd:(}{it:varname}{cmd:)} is the identifier for the first fixed effect.Typically, {it:varname} will be an person's ID, such as an employee ID. {cmdab:unit}{cmd:(}{it:varname}{cmd:)} is the identifier for the second fixed effect.Typically, {it:varname} will be a unit ID, such as a firm ID. {cmdab:save}{cmd:(}{it:filename}{cmd:)} is the name of the output file (optional). This fileis a matrix saved with fputmatrix, with the coefficients of the covariates first,then the individual effects, and finally the unit fixed effects.
+{smcl}
+{hline}
+help for {hi:a2reg}
+{hline}
 
-{cmdab:prefix}{cmd:(}{it:name}{cmd:)} is the prefix used to build the names of the betas. For
-instance, the beta of the {it:varname} covariate will be stored in {it:prefix_varname}. If
-no prefix is specified, 'effect' is assumed.
-{title:Examples}a2reg y x1 x2 , individual(personid) unit(firmid) {title:Author}{p}Amine Ouazad, Centre de Recherche en Economie et Statistique (CREST-INSEE) {browse "http://www.crest.fr":http://www.crest.fr}, and Centre for the Economics of Education {browse "http://cee.lse.ac.uk":http://cee.lse.ac.uk}.Email {browse "mailto:amine.ouazad@ensae.fr":amine.ouazad@ensae.fr}{title:Acknowledgement}{p}This command is part of a direct port of the FORTRAN cg program that was written by {bf: Robert Creecy} and {bf:Lars Vilhuber} for Unix platforms.{title:Reference}Abowd J., Creecy R., Kramarz F., Computing person and firm effects using linked longitudinal employer-employee data, March 2002.{title:Also see}{help a2group} (if installed)
+{title:Estimates linear models with two fixed effects}
+
+{p 8 27}
+{cmdab:a2reg} 
+{it:depvar} {it:indepvars},
+{cmdab:individual}{cmd:(}{it:varname}{cmd:)}
+{cmdab:unit}{cmd:(}{it:varname}{cmd:)}
+
+{p}
+
+{title:Description}
+
+{p 0 0}
+{hi:a2reg} estimates two-way fixed effects, with {it:individual} indexing the first 
+fixed effect, and {it:unit} indexing the second fixed effect. The dependent variable
+is {it:depvar} and the covariates are in {it:indepvars}. At least one covariate
+is mandatory.
+
+{title:Identification constraints}
+
+{p 0 0}
+The identification constraints for the fixed effects are set by convention
+such that the sum of individual effects is equal to zero and such that the 
+last unit fixed effect is zero.
+
+{title:Output}
+
+{p 0 0}
+The program displays conventional output regression, along with Fisher
+tests for the significance of fixed effects. However the computation of
+confidence intervals is not computationally feasible, since it would require
+the inversion of the variance-covariance matrix. Therefore confidence
+intervals are not printed.
+
+{title:Options}
+
+{p 0 0}
+{it:depvar} is the dependent variable. No missing observation is allowed.
+
+{it:indepvars} lists explanatory variables. No missing observation is allowed.
+
+{cmdab:individual}{cmd:(}{it:varname}{cmd:)} is the identifier for the first fixed effect.
+
+{cmdab:unit}{cmd:(}{it:varname}{cmd:)} is the identifier for the second fixed effect.
+
+{title:Examples}
+
+a2reg y x1 x2 , individual(personid) unit(firmid) 
+
+{title:Author}
+
+{p}
+Amine Ouazad, PhD Candidate of the Paris School of Economics,
+and London School of Economics, Centre de Recherche en Economie et Statistique (CREST-INSEE).
+
+Webpage {browse "http://www.pse.ens.fr/junior/ouazad/"}
+
+Email {browse "mailto:amine.ouazad@pse.ens.fr":amine.ouazad@pse.ens.fr}
+
+{title:Acknowledgement}
+
+{p}
+This command is part of a port of the FORTRAN cg program that was written 
+by {bf: Robert Creecy} for Unix platforms.
+
+{title:Reference}
+
+Abowd J., Creecy R., Kramarz F., Computing person and firm effects using linked 
+longitudinal employer-employee data, March 2002.
+
+{title:Also see}
+
+{help a2group} (if installed)
+
+
+
+
+
