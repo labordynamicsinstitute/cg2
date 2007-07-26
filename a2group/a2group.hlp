@@ -12,7 +12,6 @@ help for {hi:a2group}
 {cmdab:unit}{cmd:(}{it:varname}{cmd:)}
 {cmdab:groupvar}{cmd:(}{it:varname}{cmd:)}
 ]
-replace
 
 {p}
 
@@ -35,26 +34,26 @@ Typically, {it:varname} will be a unit ID, such as a firm ID.
 {cmdab:groupvar}{cmd:(}{it:groupvar}{cmd:)} is the name of the new variable containing
 the identifier of the mobility group.
 
-The {hi:replace} option is mandatory. It warns the user that the dataset will be altered.
 
 {title:Examples}
 
-Using the variable {hi:length} from the {hi:auto} data (click on the following commands in order):
-
-{stata a2group, individual(personid) unit(firmid) replace}
+a2group, individual(personid) unit(firmid)
 
 {title:Author}
 
 {p}
-Amine Ouazad, Centre de Recherche en Economie et Statistique (CREST-INSEE).
+Amine Ouazad, PhD Candidate of the Paris School of Economics,
+and London School of Economics, Centre de Recherche en Economie et Statistique (CREST-INSEE).
 
-Email {browse "mailto:amine.ouazad@ensae.fr":amine.ouazad@ensae.fr}
+Webpage {browse "http://www.pse.ens.fr/junior/ouazad/"}
+
+Email {browse "mailto:amine.ouazad@pse.ens.fr":amine.ouazad@pse.ens.fr}
 
 {title:Acknowledgement}
 
 {p}
 This command is part of a direct port of the FORTRAN cg program that was written by
-{bf: Robert Creecy} and {bf:Lars Vilhuber} for Unix platforms.
+{bf: Robert Creecy} for Unix platforms.
 
 {title:Also see}
 
