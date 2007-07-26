@@ -10,6 +10,12 @@ help for {hi:a2reg}
 {it:depvar} {it:indepvars},
 {cmdab:individual}{cmd:(}{it:varname}{cmd:)}
 {cmdab:unit}{cmd:(}{it:varname}{cmd:)}
+[
+{cmdab:indeffect}{cmd:(}{it:name}{cmd:)}
+{cmdab:uniteffect}{cmd:(}{it:name}{cmd:)}
+{cmdab:xb}{cmd:(}{it:name}{cmd:)}
+{cmdab:resid}{cmd:(}{it:name}{cmd:)}
+]
 
 {p}
 
@@ -48,9 +54,19 @@ intervals are not printed.
 
 {cmdab:unit}{cmd:(}{it:varname}{cmd:)} is the identifier for the second fixed effect.
 
+{cmdab:indeffect}{cmd:(}{it:name}{cmd:)} is the name of the output variable for the first fixed effect. 
+
+{cmdab:uniteffect}{cmd:(}{it:name}{cmd:)} is the name of the output variable for the second fixed effect.
+
+{cmdab:xb}{cmd:(}{it:name}{cmd:)} is the name of the output variable for the part predicted by the covariates.
+
+{cmdab:resid}{cmd:(}{it:varname}{cmd:)} is the name of the output variable for the resid.
+
+
+
 {title:Examples}
 
-a2reg y x1 x2 , individual(personid) unit(firmid) 
+a2reg y x1 x2 , individual(personid) unit(firmid) indeffect(personeffect)
 
 {title:Author}
 
