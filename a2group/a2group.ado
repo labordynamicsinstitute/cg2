@@ -15,7 +15,7 @@ global VERSION	    = "0.1"
 cap program drop a2group
 program define a2group, sortpreserve
 version 9.0
-syntax , individual(varname) unit(varname) replace groupvar(name)
+syntax , individual(varname) unit(varname) groupvar(name)
 
 	display "Creating mobility groups"
 	display "Version $VERSION"
