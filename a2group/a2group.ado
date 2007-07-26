@@ -1,16 +1,25 @@
 *! version 0.0.1 23may2006
 
+/*
+ *
+ * a2group: defines mobility groups
+ * 	    For a thorough reference on this question,
+ *	    see Amine Ouazad, 'Dynamic Two-Way Fixed Effect Models: Identification and Estimation'
+ *	    at www.pse.ens.fr/junior/ouazad
+ */
+
 global ORIGAUTHOR     = "Robert Creecy"
-global CURRENTAUTHOR  = "Lars Vilhuber, STATA port by Amine Ouazad"
+global CURRENTAUTHOR  = "Amine Ouazad"
 global VERSION	    = "0.1"
 
-program define a2group
+cap program drop a2group
+program define a2group, sortpreserve
 version 9.0
 syntax , individual(varname) unit(varname) replace groupvar(name)
 
-	display "Two-way fixed effects regression - Creating mobility groups"
+	display "Creating mobility groups"
 	display "Version $VERSION"
-	display "Original author: $ORIGAUTHOR ; Current Author : $CURRENTAUTHOR"
+	display "Current Author : $CURRENTAUTHOR ; Original author: $ORIGAUTHOR"
 	display "Individual ID : `individual' ; Unit ID : `unit' ; Group variable : `groupvar'"
 
 quietly {
