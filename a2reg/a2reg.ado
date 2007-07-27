@@ -22,17 +22,31 @@ version 9.1;
 
 /* 
  * Syntax: a2reg depvar indepvars, 
- *	individual(first fixed effect) unit(second fixed effect) save(output file)
+ *	individual(first fixed effect) unit(second fixed effect)
+ *	resid(name) xb(name) largestgroup
  */
 
 syntax varlist(min=2) [if] [in], individual(varname) unit(varname) 
 		[indeffect(name)] [uniteffect(name)]
-		[resid(name)] [xb(name)];
+		[resid(name)] [xb(name)] [largestgroup];
 
 /* Checks whether all variables are numeric */
 quietly {;
 foreach v in `varlist' {;
 	confirm numeric variable `v';
+};
+
+if ("`largestgroup'"!="") {;
+	quietly{;
+	tempvar group group_count;
+	a2group, individual(`individual') unit(`unit') groupvar(`group');
+	egen `group_count' = count(`group'), by(`group');
+	summarize `group_count';
+	local max = r(max);
+	summarize `group' if `group_count' == `max';
+	local largest_group = r(min);
+	drop if `group' != `largest_group';
+	};
 };
 
 if ("`indeffect'"!="") {;
