@@ -25,7 +25,7 @@ version 9.1;
  *	individual(first fixed effect) unit(second fixed effect)
  *	resid(name) xb(name) largestgroup
  */
-
+ if !replay() {;
 syntax varlist(min=2) [if] [in], individual(varname) unit(varname) 
 		[indeffect(name)] [uniteffect(name)]
 		[resid(name)] [xb(name)] [largestgroup];
@@ -191,7 +191,14 @@ local r2_nofe=e(r2);
 local Fstat_nofe=((`r2' - `r2_nofe')/(`dfunit'+`dfind'))/((1-`r2')/(`dfe'));
 local pval_nofe=fprob(`dfind'+`dfunit', `dfe', `Fstat_nofe');
 
-ereturn post betas;
+/*matrix variance = J(`dfx',`dfx',.);
+
+matrix colnames variance = `varlist';
+matrix rownames variance = `varlist';*/
+
+
+
+ereturn post betas /*variance*/;
 ereturn scalar N 	= _N;
 ereturn scalar RSS 	= `rss';
 ereturn scalar r2 	= `r2';
@@ -222,9 +229,13 @@ ereturn scalar p_both = `pval_nofe';
 
 /*ereturn matrix beta 	=  betas;*/
 ereturn local title "Linear regression with two way fixed effects";
-ereturn local cmd "a2reg";
+ereturn local cmd "reg";
 ereturn local model "twowayfe";
-
+};
+ else {;
+	 syntax , Level(integer `c(level)');
+	 };
+ 
 di _n in gr `"`e(title)'"' _col(56) `"Number of obs ="' in ye %8.0f e(N);
 di in gr _col(56) `"F("' in gr %3.0f e(dfm) in gr `","' in gr %6.0f e(dfe) in gr `") ="' in ye %8.2f e(F_all);
 di in gr _col(56) `"Prob > F      ="'  in ye %8.4f e(p_all);
@@ -242,14 +253,14 @@ di in smcl in gr "{hline 13}{c +}{hline 65}";
 /* Display coefficient estimates */
 
 matrix beta = e(b);
-
+	
 foreach v in `varlist' {;
-	local value = beta[1,colnumb(beta,"`v'")];
-	di in smcl in gr %12s abbrev("`v'",12) " {c |} " in ye %9.0g `value';
-};
-
-di in smcl in gr %12s "_cons" " {c |} " in ye %9.0g e(constant);
-
+		local value = beta[1,colnumb(beta,"`v'")];
+		di in smcl in gr %12s abbrev("`v'",12) " {c |} " in ye %9.0g `value' " missing : standard errors only by bootstrapping ";
+		};
+	
+	di in smcl in gr %12s "_cons" " {c |} " in ye %9.0g e(constant);
+	
 di in smcl in gr "{hline 13}{c +}{hline 65}";
 
 di in yellow "SDs of FEs" in gr "   {c |}";
