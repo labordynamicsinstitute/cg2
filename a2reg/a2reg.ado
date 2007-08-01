@@ -687,6 +687,8 @@ function addresultscg(string scalar dependent, string rowvector covariates,
 
 	stata(sprintf("matrix input betas = (%s)",cmd_listcovvalues));
 	stata(sprintf("matrix colnames betas = %s",cmd_listcovnames));
+	
+	fclose(fp);
 }
 
 
