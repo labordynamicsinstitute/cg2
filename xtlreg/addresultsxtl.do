@@ -33,6 +33,7 @@ function addresultscgxtl(string scalar dependent, string rowvector covariates,
 	
 	fp = fopen(filerawoutput,"r");
 	params = fgetmatrix(fp);
+	fclose(fp);
 	
 	betas 		= params[1 		      	.. ncov				];
 	indeffect 		= params[ncov + 1 		.. ncov + nind			];
