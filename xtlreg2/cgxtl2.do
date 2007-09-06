@@ -31,7 +31,7 @@ function maincgxtl2(string scalar dependent, string rowvector covariates,
 //
 ////////////////////////////////////////////////////////////////////////
 
-//*************** DATA DECLARATION
+/************** DATA DECLARATION */
 
 	real scalar n, ncov, ncoef;
 	
@@ -70,7 +70,7 @@ function maincgxtl2(string scalar dependent, string rowvector covariates,
 	
 	
 
-//***************** GETTING VIEWS ON THE DATA
+/***************** GETTING VIEWS ON THE DATA */
 
 	st_view(cov=., 		., covariates);
 	st_view(y=., 		., dependent);

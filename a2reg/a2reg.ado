@@ -81,8 +81,6 @@ if ("`xb'"=="") {;
 	tempvar xb;
 };
 
-preserve;
-
 marksample touse, novarlist strok;
 keep if `touse';
 
