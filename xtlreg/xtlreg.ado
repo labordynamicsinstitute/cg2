@@ -234,7 +234,7 @@ ereturn matrix corrtable R;
 }
 end;
 
-mata 
+mata;
 mata clear
 mata set matastrict on
 mata set matalnum   on
