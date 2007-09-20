@@ -237,9 +237,6 @@ end;
 #delimit cr
 
 mata
-mata clear
-mata set matastrict on
-mata set matalnum   on
 
 function maincgxtl(string scalar dependent, string rowvector covariates,
 			string scalar individualid, string scalar unitid, string scalar pastunitid,
