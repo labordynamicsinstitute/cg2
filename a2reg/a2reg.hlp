@@ -22,8 +22,9 @@ help for {hi:a2reg}
 {title:Description}
 
 {p 0 0}
-{hi:a2reg} estimates two-way fixed effects, with {it:individual} indexing the first 
-fixed effect, and {it:unit} indexing the second fixed effect. The dependent variable
+{hi:a2reg} estimates two-way fixed effects.
+{it:individual} indexes the first 
+fixed effect, and {it:unit} indexes the second fixed effect. The dependent variable
 is {it:depvar} and the covariates are in {it:indepvars}. At least one covariate
 is mandatory.
 
@@ -63,7 +64,6 @@ intervals are not printed.
 {cmdab:resid}{cmd:(}{it:varname}{cmd:)} is the name of the output variable for the resid.
 
 
-
 {title:Examples}
 
 a2reg y x1 x2 , individual(personid) unit(firmid) indeffect(personeffect)
@@ -92,8 +92,4 @@ longitudinal employer-employee data, March 2002.
 {title:Also see}
 
 {help a2group} (if installed)
-
-
-
-
 
