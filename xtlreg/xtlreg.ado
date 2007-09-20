@@ -234,8 +234,8 @@ ereturn matrix corrtable R;
 }
 end;
 
-mata: mata clear
-mata
+mata 
+mata clear
 mata set matastrict on
 mata set matalnum   on
 
@@ -809,11 +809,6 @@ void matvecxtl (
 	}
 
 }
-
-end
-
-cap mata: mata drop addresultscgxtl()
-mata
 
 function addresultscgxtl(string scalar dependent, string rowvector covariates,
 				string scalar individualid, string scalar unitid, string scalar pastunitid,
