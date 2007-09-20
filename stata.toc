@@ -9,4 +9,7 @@ d Abowd, Creecy, and Kramarz (2002).
 d Author's Homepage: {browse "http://www.carva.org/amine.ouazad":http://www.carva.org/amine.ouazad}
 
 p a2reg Package to estimate regressions with two-way fixed effects.
-p a2group Grouping Program - Imposes the identification constraints for the two-way fixed effects regression 
+p a2group Grouping Program - Imposes the identification constraints for the two-way fixed effects regression
+p xtlreg Package that estimates regressions with two-way fixed effects and one lagged fixed effect
+p xtlreg2 Package that estimates regressions with two-way current and lagged fixed effects
+
