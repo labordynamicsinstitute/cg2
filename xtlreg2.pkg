@@ -1,0 +1,10 @@
+v 3
+d xtlreg2. Package to estimate regressions with two-way current and lagged fixed effects.
+d Created by {browse "http://www.carva.org/amine.ouazad":Amine Ouazad}.
+
+
+f xtlreg2/xtlreg2.ado
+f xtlreg2/xtlreg2.hlp
+f xtlreg2/addresultsxtl2.do
+f xtlreg2/cgxtl2.do
+
