@@ -1,0 +1,103 @@
+{smcl}
+{hline}
+help for {hi:xtlreg2}
+{hline}
+
+{title:Estimates linear models with two fixed effects, current and lagged}
+
+{p 8 27}
+{cmdab:xtlreg2} 
+{it:depvar} {it:indepvars},
+{cmdab:individual}{cmd:(}{it:varname}{cmd:)}
+{cmdab:unit}{cmd:(}{it:varname}{cmd:)}
+[
+{cmdab:indeffect}{cmd:(}{it:name}{cmd:)}
+{cmdab:uniteffect}{cmd:(}{it:name}{cmd:)}
+{cmdab:pastuniteffect}{cmd:(}{it:name}{cmd:)}
+{cmdab:xb}{cmd:(}{it:name}{cmd:)}
+{cmdab:resid}{cmd:(}{it:name}{cmd:)}
+]
+
+{p}
+
+{title:Description}
+
+{p 0 0}
+{hi:xtlreg2} estimates two-way fixed effects with one of the fixed effects included as lagged.
+{it:individual} indexes the first 
+fixed effect, and {it:unit} indexes the second fixed effect. The second fixed effect
+is included as lagged in the second period. The dependent variable
+is {it:depvar} and the covariates are in {it:indepvars}. At least one covariate
+is mandatory.
+
+{title:Identification constraints}
+
+{p 0 0}
+The identification constraints for the fixed effects are set by convention
+such that the sum of individual effects is equal to zero and such that the 
+last unit fixed effect is zero.
+
+{title:Output}
+
+{p 0 0}
+The program displays conventional output regression, along with Fisher
+tests for the significance of fixed effects. However the computation of
+confidence intervals is not computationally feasible, since it would require
+the inversion of the variance-covariance matrix. Therefore confidence
+intervals are not printed.
+
+{title:Options}
+
+{p 0 0}
+{it:depvar} is the dependent variable. No missing observation is allowed.
+
+{it:indepvars} lists explanatory variables. No missing observation is allowed.
+
+{cmdab:individual}{cmd:(}{it:varname}{cmd:)} is the identifier for the first fixed effect.
+
+{cmdab:unit}{cmd:(}{it:varname}{cmd:)} is the identifier for the second fixed effect.
+
+{cmdab:indeffect}{cmd:(}{it:name}{cmd:)} is the name of the output variable for the first fixed effect. 
+
+{cmdab:uniteffect}{cmd:(}{it:name}{cmd:)} is the name of the output variable for the second fixed effect.
+
+{cmdab:pastuniteffect}{cmd:(}{it:name}{cmd:)} is the name of the output variable for the lagged fixed effect.
+
+{cmdab:xb}{cmd:(}{it:name}{cmd:)} is the name of the output variable for the part predicted by the covariates.
+
+{cmdab:resid}{cmd:(}{it:varname}{cmd:)} is the name of the output variable for the resid.
+
+
+{title:Examples}
+
+xtlreg2 y x1 x2 , individual(personid) unit(firmid) indeffect(personeffect)
+
+{title:Author}
+
+{p}
+Amine Ouazad, PhD Candidate of the Paris School of Economics,
+and London School of Economics, Centre de Recherche en Economie et Statistique (CREST-INSEE).
+
+Webpage {browse "http://www.pse.ens.fr/junior/ouazad/"}
+
+Email {browse "mailto:amine.ouazad@pse.ens.fr":amine.ouazad@pse.ens.fr}
+
+{title:Acknowledgement}
+
+{p}
+This command has been developed by Amine Ouazad, as part of the data analysis
+on the paper "What Makes a Test Score? The Respective Contributions of 
+ Pupils, Schools and Peers in Achievement in English Primary Education", Francis
+ Kramarz, Steve Machin and Amine Ouazad.
+
+{title:Also see}
+
+
+{help xtlreg} (if installed)
+{help a2reg} (if installed)
+{help a2group} (if installed)
+
+
+
+
+
