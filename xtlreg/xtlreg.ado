@@ -234,7 +234,9 @@ ereturn matrix corrtable R;
 }
 end;
 
-mata;
+#delimit cr
+
+mata
 mata clear
 mata set matastrict on
 mata set matalnum   on
@@ -875,4 +877,6 @@ function addresultscgxtl(string scalar dependent, string rowvector covariates,
 }
 
 end
+
+
 
