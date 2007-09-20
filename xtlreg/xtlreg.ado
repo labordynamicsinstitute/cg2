@@ -109,7 +109,7 @@ keep if `touse';
 
 gettoken dependent varlist : varlist;
 
-tempvar indid unitid cellid;
+tempvar indid unitid cellid timeid;
 tempfile save;
 
 /*
