@@ -831,7 +831,6 @@ function addresultscgxtl(string scalar dependent, string rowvector covariates,
 	real vector params;
 	real matrix data;
 	real scalar n,i;
-	string scalar indeffect_name, uniteffect_name, pastuniteffect_name;
 	string scalar cmd_listcovnames;
 	string scalar cmd_listcovvalues;
 
