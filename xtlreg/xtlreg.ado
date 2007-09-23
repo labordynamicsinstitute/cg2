@@ -869,7 +869,11 @@ function addresultscgxtl(string scalar dependent, string rowvector covariates,
 	cmd_listcovnames	=	"";
 	cmd_listcovvalues	= 	"";
 
-	for (i = 1; i<= ncov; i++) {
+	cmd_listcovnames 	= sprintf("%s %s",cmd_listcovnames, covariates[1]);
+	cmd_listcovvalues	= sprintf("%s %g,",cmd_listcovvalues, betas[1]);
+	stata(sprintf("quietly replace %s = %g * %s",xb_name,betas[1], covariates[1]));
+
+	for (i = 2; i<= ncov; i++) {
 		cmd_listcovnames 	= sprintf("%s %s",cmd_listcovnames, covariates[i]);
 		cmd_listcovvalues	= sprintf("%s %g,",cmd_listcovvalues, betas[i]);
 		stata(sprintf("quietly replace %s = %s + %g * %s",xb_name,xb_name,betas[i], covariates[i]));
