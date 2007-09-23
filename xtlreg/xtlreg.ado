@@ -221,10 +221,10 @@ matrix colnames means = Individual_Effect Unit_Effect Past_Unit_Effect XB Residu
 matrix sdevs = (stdev_ie, 	stdev_ue, 	stdev_upe, 	stdev_xb, 	stdev_resid);
 matrix colnames sdevs = Individual_Effect Unit_Effect Past_Unit_Effect XB Residual;
 
-matrix accum R = y `indeffect' `uniteffect' `resid', nocons dev;
-matrix R = corr(R);
+/*matrix accum R = y `indeffect' `uniteffect' `resid', nocons dev;
+matrix R = corr(R); 
 matrix colnames R = Dependent Individual_Effect Unit_Effect Residual;
-matrix rownames R = Dependent Individual_Effect Unit_Effect Residual;
+matrix rownames R = Dependent Individual_Effect Unit_Effect Residual;*/
 
 ereturn scalar nobs 	= _N;
 ereturn scalar nind     = `nind';
@@ -234,7 +234,9 @@ ereturn scalar constant	= mean_ie;
 ereturn matrix beta	betas;
 ereturn matrix M		means;
 ereturn matrix SD		sdevs;
+/*
 ereturn matrix corrtable R;
+*/
 };
 end;
 
