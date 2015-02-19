@@ -65,7 +65,7 @@ We have tried to be consistent throughout in the use of typographical convention
 
 
 # Acknowledgements
-John Abowd, Robert Creecy, Kevin McKinney, and Lars Vilhuber.  Census Bureau and the rest of the LEHD staff.
+John Abowd @johnmabowd, Robert Creecy, Kevin McKinney, and Lars Vilhuber @larsvilhuber.  Census Bureau and the rest of the LEHD staff.
 
 # Contact
 If you have any questions or comments please contact Kevin McKinney at kevinm@ccrdc.ucla.edu.
