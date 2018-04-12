@@ -2,7 +2,7 @@
 CG2 Fixed Effects Estimation Software
 =====================================
 
-For more details, see http://www.vrdc.cornell.edu/cg2/ (official page) and  http://labordynamicsinstitute.github.io/cg2 (latest).
+For more details, see http://labordynamicsinstitute.github.io/cg2 (latest).
 
 # Overview
 CG2 is a package of Fortran 90 and SAS programs that estimate non-nested 2 component fixed effect models.  The programs have been successfully compiled and tested on multiple Unix platforms (IA32 (SuSe and Redhat Linux), Itanium (SuSe Linux), and Sparc (Solaris)), but the code should work fine on other platforms as well (ie. IA32 (Windows)). A port to [Stata](http://www.stata.com/) (a2reg) is maintained by [Amine Ouzad](http://www.ouazad.com/) (an early version is available in the [Stata branch](https://github.com/labordynamicsinstitute/cg2/tree/stata), the latest version can be found at https://ideas.repec.org/c/boc/bocode/s456942.html).
