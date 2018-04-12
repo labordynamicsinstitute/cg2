@@ -1,5 +1,10 @@
 ![CG2](https://raw.githubusercontent.com/labordynamicsinstitute/cg2/master/doc/images/cg2_logo.png)
 
+
+
+[![DOI](https://zenodo.org/badge/23338220.svg)](https://zenodo.org/badge/latestdoi/23338220)
+
+
 # CG2 Fixed Effects Estimation Software
 
 For more details, see [https://labordynamicsinstitute.github.io/cg2](http://labordynamicsinstitute.github.io/cg2) (latest).
