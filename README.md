@@ -2,7 +2,7 @@
 
 
 
-[![DOI](https://zenodo.org/badge/23338220.svg)](https://zenodo.org/badge/latestdoi/23338220)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1217493.svg)](https://doi.org/10.5281/zenodo.1217493)
 
 
 # CG2 Fixed Effects Estimation Software
